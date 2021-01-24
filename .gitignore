@@ -1,0 +1,12 @@
+# Build / Debugger Files
+*.adb
+*.asm
+*.cdb
+*.ihx
+*.lst
+*.map
+*.o
+*.sym
+
+# Local project Intellisense settings
+.vscode/c_cpp_properties.json
