@@ -5,4 +5,3 @@ setting up and compiling is a little complex so just take the main.gb file and r
 
 ### Remove below later
 Hey even though the graphics are borked, at least you were able to render again so progress at least.
-.
