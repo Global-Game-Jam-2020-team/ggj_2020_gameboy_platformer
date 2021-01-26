@@ -160,6 +160,12 @@ void main()
 
     while(1)
     {
+        printf("%d\n", (UINT16)currentspeedY); 
+        printf("%d\n", (UINT16)floorYPosition);
+        printf("%d\n", (UINT16)gravity);
+        printf("%d\n", (UINT16)jumping);
+        printf("%d, %d\n", (UINT16)playerlocation[0], &(UINT16)playerlocation[1]); delay(999);
+            
         if ((joypad() & J_A) || jumping == 1)
         {
             jump(0, playerlocation);
