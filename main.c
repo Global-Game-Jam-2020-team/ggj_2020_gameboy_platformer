@@ -5,6 +5,7 @@
 #include "audio_configuration.h"
 #include "game_configuration.h"
 #include "player.h"
+#include "scene_configuration.h"
 
 struct player p;
 
@@ -15,6 +16,7 @@ int main()
     while(TRUE)
     {
         player_core_loop(&p);
+        scene_core_loop();
 
         performatdelay(5);
     }

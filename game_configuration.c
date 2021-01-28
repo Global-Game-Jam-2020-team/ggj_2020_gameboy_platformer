@@ -10,6 +10,7 @@ void initialize_game()
 
     init_sfx();
 
+    SHOW_BKG;
     SHOW_SPRITES;
 }
 
