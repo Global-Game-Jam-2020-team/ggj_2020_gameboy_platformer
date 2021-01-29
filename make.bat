@@ -1,3 +1,5 @@
+del main.gb
+
 @REM mod2gbt [mod file name] [-c to create .c file] [memory bank number]
 mod2gbt matts_demo.mod song -c 2
 
@@ -14,6 +16,6 @@ c:\gbdk\bin\lcc -Wa-l -Wl-m -Wf--debug -Wl-y -Wl-w  -c -o gbt_player_bank1.o gbt
 
 @echo off
 c:\gbdk\bin\lcc -Wa-l -Wl-m -Wf--debug -Wl-y -Wl-w -c -o main.o main.c
-c:\gbdk\bin\lcc -Wa-l -Wl-m -Wf--debug -Wl-y -Wl-w -o main.gb main.o output.o gbt_player.o gbt_player_bank1.o audio_configuration.c game_configuration.c player.c scene_configuration.c
+c:\gbdk\bin\lcc -Wa-l -Wl-m -Wf--debug -Wl-y -Wl-w -o main.gb main.o output.o gbt_player.o gbt_player_bank1.o audio_configuration.c music_configuration.c game_configuration.c player.c scene_configuration.c
 
 del *.o *.lst

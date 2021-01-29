@@ -1,12 +1,18 @@
 {
     "files.associations": {
+        "audio_configuration.h": "c",
+        "game_configuration.h": "c",
+        "gbt_player.h": "c",
+        "player.h": "c",
+        "scene_configuration.h": "c",
         "stdio.h": "c",
         "stdlib.h": "c",
         "types.h": "c",
         "malloc.h": "c",
         "map_library.h": "c",
         "rand.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "music_configuration.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
