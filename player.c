@@ -72,19 +72,12 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
         _player->jumping = 1;
     }
 
-    // Here's the plan, we are gonna have a variable which is called jump_height,
-    // We will set it here, then once you press to jump, it will be affected by gravity
-    // We will have a loop check to see how long it takes to gt to the top of the jump height
-    // once it reaches the top, go back dowm
-    // once it does, check jump to off but also check if it will hit the floor, if yes, also stop jumping
-
     if(_player->jumping == 1)
     {
         if(!has_reached_maximum_jump_height) 
         {
             if(jump_height != 0)
             { 
-                // printf("%d\n", (UINT16)jump_height); delay(999);
                 jump_height -= 1;
 
                 _player->player_position[1] -= jump_height;
@@ -96,7 +89,24 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
         else 
         {
             // Did it again, negative minus a negative equals a positive
-            if(jump_height == 5 /*|| scene_collision(0, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y)*/)
+            if(!scene_collision(0, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
+            {
+                jump_height += 1;
+
+                _player->player_position[1] += jump_height;
+
+                _player->index_top_left_x = (_player->player_position[0] - 8) / 8;
+                _player->index_top_left_y = (_player->player_position[1] - 16) / 8;
+                _player->tile_index_top_left = 32 * _player->index_top_left_y + _player->index_top_left_x;
+
+                if(scene_collision(0, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
+                {
+                    UINT8 position_y_offset = _player->player_position[1] % 8;
+
+                    if(position_y_offset != 0) { _player->player_position[1] -= position_y_offset; }
+                }
+            }
+            else
             {
                 has_reached_maximum_jump_height = FALSE;
 
@@ -105,51 +115,13 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
                 _player->jumping = 0;
             }
 
-            jump_height += 1;
-
-            _player->player_position[1] += jump_height;
-
             move_sprite(_sprite_id, _player->player_position[0], _player->player_position[1]);
         }
     }
-
-    // INT8 possible_surface_y;
-
-    // if(_player->jumping == 0)
-    // {
-    //     play_fx(0);
-
-    //     _player->jumping = 1;
-
-    //     _player->current_speed_y = 10;
-    // }
-
-    // _player->current_speed_y = _player->current_speed_y + _player->gravity;
-
-    // _player->player_position[1] -= _player->current_speed_y;
-
-    // possible_surface_y = would_hit_surface(_player, _player->player_position[1]);
-
-    // if(possible_surface_y > -1)
-    // {
-    //     _player->jumping = 0;
-
-    //     move_sprite(_sprite_id, _player->player_position[0], possible_surface_y);
-    // }
-    // else { move_sprite(_sprite_id, _player->player_position[0], _player->player_position[1]); }
 }
 
-void update_Player(struct player *_player)
+void player_movement(struct player *_player)
 {
-    _player->index_top_left_x = (_player->player_position[0] - 8) / 8;
-    _player->index_top_left_y = (_player->player_position[1] - 16) / 8;
-    _player->tile_index_top_left = 32 * _player->index_top_left_y + _player->index_top_left_x;
-}
-
-void player_core_loop(struct player *_player)
-{
-    initialize_player(_player);
-
     if((joypad() & J_A) || _player->jumping == 1) { player_jump(_player, 0); }
 
     if (joypad() & J_LEFT && !scene_collision(1, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
@@ -165,6 +137,28 @@ void player_core_loop(struct player *_player)
 
         move_sprite(0, _player->player_position[0], _player->player_position[1]);
     }
+}
 
+void update_Player(struct player *_player)
+{
+    _player->index_top_left_x = (_player->player_position[0] - 8) / 8;
+    _player->index_top_left_y = (_player->player_position[1] - 16) / 8;
+    _player->tile_index_top_left = 32 * _player->index_top_left_y + _player->index_top_left_x;
+
+    // While the player is not jumping, check to see if they are touching the ground, if not, then pull them down. Afterwards update.
+    if(_player->jumping != 1 && !scene_collision(0, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
+    {
+        _player->player_position[1] -= _player->gravity * 2;
+
+        move_sprite(0, _player->player_position[0], _player->player_position[1]);
+    }
+}
+
+void player_core_loop(struct player *_player)
+{
+    initialize_player(_player);
+
+    player_movement(_player);
+    
     update_Player(_player);
 }

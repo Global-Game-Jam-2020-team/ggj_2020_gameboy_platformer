@@ -29,6 +29,8 @@ INT8 would_hit_surface(struct player *, UINT8);
 
 void player_jump(struct player *, UINT8);
 
+void player_movement(struct player *);
+
 void update_Player(struct player *);
 
 // Anything that happens within the player, will occurr in this loop

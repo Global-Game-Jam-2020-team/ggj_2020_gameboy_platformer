@@ -5,7 +5,7 @@
 
 BOOLEAN has_scene_been_initialized = FALSE;
 
-const char collision_tile[1] = {0x00};
+const char blank_tile[1] = {0x00};
 
 // Down = 0 // Left = 1 // Right = 2 // Up = 3
 BOOLEAN scene_collision(UINT8 _direction, UINT16 _player_index_top_left, UINT16 _player_index_top_left_x, UINT16 _player_index_top_left_y)
@@ -13,12 +13,13 @@ BOOLEAN scene_collision(UINT8 _direction, UINT16 _player_index_top_left, UINT16 
     switch(_direction)
     {
         // Down
-        case 0: if(background_map[_player_index_top_left + background_mapWidth] != collision_tile[0] || _player_index_top_left_x == 0) { return TRUE; } break;
+        case 0: if(background_map[_player_index_top_left + background_mapWidth] != blank_tile[0] || _player_index_top_left_y == background_mapHeight) { return TRUE; } break;
         // Left
-        case 1: if(background_map[_player_index_top_left - 1] != collision_tile[0] || _player_index_top_left_x == 0) { return TRUE; } break;
+        case 1: if(background_map[_player_index_top_left] != blank_tile[0] || _player_index_top_left_x == 0) { return TRUE; } break;
         // Right
-        case 2: if(background_map[_player_index_top_left + 1] != collision_tile[0] || _player_index_top_left_x == background_mapWidth) { return TRUE; } break;
+        case 2: if(background_map[_player_index_top_left + 1] != blank_tile[0] || _player_index_top_left_x == background_mapWidth) { return TRUE; } break;
         // Up
+        case 3: if(background_map[_player_index_top_left - background_mapWidth] != blank_tile[0] || _player_index_top_left_y == 0) { return TRUE; } break;
     }
     // Default
     return FALSE;
