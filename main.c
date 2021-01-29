@@ -18,7 +18,8 @@ int main()
         player_core_loop(&p);
         scene_core_loop();
 
-        performatdelay(5);
+        performatdelay(1);
+        gbt_update();
     }
 
     return 0;
