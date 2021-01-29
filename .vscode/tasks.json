@@ -6,7 +6,8 @@
         {
             "label": "echo",
             "type": "shell",
-            "command": ".\\make.bat && .\\run.bat",
+            "command": ".\\make.bat",
+            // "command": ".\\make.bat && .\\run.bat",
             "group": {
                 "kind": "build",
                 "isDefault": true

@@ -7,6 +7,7 @@
 BOOLEAN has_player_been_intialized = FALSE;
 BOOLEAN has_reached_maximum_jump_height = FALSE;
 
+UINT8 jump_delay = 0;
 UINT8 jump_height = 10;
 
 unsigned char bloke[] =
@@ -78,26 +79,45 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
         {
             if(jump_height != 0)
             { 
-                jump_height -= 1;
+                jump_delay += 1;
 
-                _player->player_position[1] -= jump_height;
+                if(jump_delay >= 3)
+                {
+                    jump_delay = 0;
 
-                move_sprite(_sprite_id, _player->player_position[0], _player->player_position[1]);
+                    jump_height -= 1;
+
+                    _player->player_position[1] -= jump_height;
+
+                    move_sprite(_sprite_id, _player->player_position[0], _player->player_position[1]);
+                }
             }
-            else { has_reached_maximum_jump_height = TRUE; }
+            else 
+            { 
+                has_reached_maximum_jump_height = TRUE; 
+
+                jump_delay = 0;
+            }
         }
         else 
         {
             // Did it again, negative minus a negative equals a positive
             if(!scene_collision(0, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
             {
-                jump_height += 1;
+                jump_delay += 1;
 
-                _player->player_position[1] += jump_height;
+                if(jump_delay >= 3)
+                {
+                    jump_delay = 0;
 
-                _player->index_top_left_x = (_player->player_position[0] - 8) / 8;
-                _player->index_top_left_y = (_player->player_position[1] - 16) / 8;
-                _player->tile_index_top_left = 32 * _player->index_top_left_y + _player->index_top_left_x;
+                    jump_height += 1;
+
+                    _player->player_position[1] += jump_height;
+
+                    _player->index_top_left_x = (_player->player_position[0] - 8) / 8;
+                    _player->index_top_left_y = (_player->player_position[1] - 16) / 8;
+                    _player->tile_index_top_left = 32 * _player->index_top_left_y + _player->index_top_left_x;
+                }
 
                 if(scene_collision(0, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
                 {
@@ -126,14 +146,14 @@ void player_movement(struct player *_player)
 
     if (joypad() & J_LEFT && !scene_collision(1, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
     {
-        _player->player_position[0] = _player->player_position[0] - 2;
+        _player->player_position[0] -= 1;
 
         move_sprite(0, _player->player_position[0], _player->player_position[1]);
     }
 
     if (joypad() & J_RIGHT && !scene_collision(2, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
     {
-        _player->player_position[0] = _player->player_position[0] + 2;
+        _player->player_position[0] += 1;
 
         move_sprite(0, _player->player_position[0], _player->player_position[1]);
     }
