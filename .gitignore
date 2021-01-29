@@ -10,3 +10,6 @@
 
 # Local project Intellisense settings
 .vscode/c_cpp_properties.json
+
+# ignore run.bat with local file path to Emulicious
+run.bat
