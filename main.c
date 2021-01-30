@@ -6,7 +6,7 @@
 #include "game_configuration.h"
 #include "player.h"
 #include "scene_configuration.h"
-#include "gbt_player.h"
+#include "music/gbt_player.h"
 
 struct player p;
 

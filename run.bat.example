@@ -1,5 +1,0 @@
-@REM kill open instance of Emulicious
-taskkill /f /im javaw.exe
-
-@REM start up Emulicious with latest compiled .gb
-start /b C:\path\to\your\emulicious.exe %cd%\main.gb
