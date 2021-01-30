@@ -12,6 +12,8 @@ void initialize_game()
     init_sfx();
     init_music();
 
+    SWITCH_ROM_MBC1(2);
+
     SHOW_BKG;
     SHOW_SPRITES;
 }

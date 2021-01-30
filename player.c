@@ -4,6 +4,10 @@
 #include "game_configuration.h"
 #include "scene_configuration.h"
 
+// Delete below later
+#include "placeholder/background_one_m_b.c"
+// Delete above later
+
 BOOLEAN has_player_been_intialized = FALSE;
 BOOLEAN has_reached_maximum_jump_height = FALSE;
 
@@ -143,6 +147,7 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
 void player_movement(struct player *_player)
 {
     if((joypad() & J_A) || _player->jumping == 1) { player_jump(_player, 0); }
+    // if(joypad() & J_A) { scene_transition(background_one_map, 2, background_one_mapWidth); }
 
     if (joypad() & J_LEFT && !scene_collision(1, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
     {

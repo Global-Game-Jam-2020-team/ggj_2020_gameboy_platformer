@@ -8,8 +8,12 @@ BOOLEAN scene_collision(UINT8, UINT16, UINT16, UINT16);
 
 BOOLEAN scene_initialization(const char *, UINT16, UINT16);
 
-// GOAL: We are gonna need to keep track of the player
-// and only move the background when they are halfway on the screen x pos
+// Will take the current background map, and slowly pan it while switching to the new one.
+// Take in a direction in which the player wants to go and the two maps.
+void scene_transition(const char*, UINT8, UINT8);
+
+void scrollable_screen(const char*, UINT16, UINT16);
+
 void scene_core_loop();
 
 #endif
