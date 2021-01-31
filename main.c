@@ -56,6 +56,23 @@ Spirit Friend Ghost Skater (including board) Sprite table (putting in main.c tem
 void matts_testing_grounds()
 {
    
+    // DISPLAY_ON;
+
+    // // init_sfx();
+    // init_music();
+
+    // // disable_interrupts();
+
+    // // gbt_play(song_Data, 2, 7);
+    // // gbt_loop(1);
+
+    // // set_interrupts(VBL_IFLAG);
+    // // enable_interrupts();
+
+    // SWITCH_ROM_MBC1(2);
+
+    // SHOW_BKG;
+    // SHOW_SPRITES;
 
     // spirit skater sprites start
         // x1 = 50;
@@ -148,6 +165,12 @@ void matts_testing_grounds()
         // move_sprite(18, x1 + 16, y2 + 8);
         // move_sprite(19, x1 + 24, y2 + 8);
     // obstacles end
+
+    while(TRUE)
+    {
+        performatdelay(1);
+        gbt_update();
+    }
 }
 
 struct player p;
