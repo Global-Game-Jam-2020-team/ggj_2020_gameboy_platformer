@@ -75,16 +75,11 @@ void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_h
 
         counter = _map_width * scrollY;
 
-        for(temporary_y_index = 0; temporary_y_index != 20; temporary_y_index++)
+        for(temporary_y_index = 1; temporary_y_index != 20; temporary_y_index++)
         {
-            if(temporary_y_index != 0)
-            {
-                for(temporary_x_index = 0; temporary_x_index != _map_width; temporary_x_index++)
-                {
-                    if(temporary_x_index < 20) { set_bkg_tiles(temporary_x_index, temporary_y_index - 1, 1, 1, (unsigned char*)(_background + counter)); }
-                    counter += 1;
-                }
-            }
+            set_bkg_tiles(0, temporary_y_index - 1, 22, 1, (unsigned char*)(_background + counter));
+
+            counter += _map_width;
         }
     }
 }
@@ -92,8 +87,8 @@ void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_h
 void scene_core_loop()
 {
     // Insert your background information below
-    scene_initialization(LongSkateBackground, background_mapWidth);
+    scene_initialization(LongSkateBackground, LongSkateBackgroundWidth);
 
-    scrollable_screen(LongSkateBackground, background_mapWidth, background_mapHeight);
+    scrollable_screen(LongSkateBackground, LongSkateBackgroundWidth, LongSkateBackgroundHeight);
     // Insert your background information above
 }
