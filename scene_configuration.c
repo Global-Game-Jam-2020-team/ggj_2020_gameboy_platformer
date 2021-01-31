@@ -19,8 +19,8 @@ UWORD counter = 0;
 
 const char blank_tile[1] = {0x00};
 
-UINT8 background_mapWidth = 20;
-UINT8 background_mapHeight = 200;
+UINT16 background_mapWidth = 20;
+UINT16 background_mapHeight = 200;
 
 // Down = 0 // Left = 1 // Right = 2 // Up = 3
 BOOLEAN scene_collision(UINT8 _direction, UINT16 _player_index_top_left, UINT16 _player_index_top_left_x, UINT16 _player_index_top_left_y)
@@ -47,7 +47,7 @@ BOOLEAN scene_initialization(const char *_background, UINT16 _map_width)
         has_scene_been_initialized = TRUE;
 
         // Insert your tile data below
-        set_bkg_data(0, 24, LongSkateBgTiles);
+        set_bkg_data(0, 26, LongSkateBgTiles);
         // Insert your tile data above
 
         counter = 0;

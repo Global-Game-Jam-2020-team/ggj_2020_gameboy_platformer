@@ -37,12 +37,12 @@ BOOLEAN initialize_player(struct player *_player)
         has_player_been_intialized = TRUE;
 
         _player->current_speed_y = 0;
-        _player->floor_y_position = 112;
+        _player->floor_y_position = 56;
         _player->gravity = -2;
         _player->index_top_left_x = 0;
         _player->index_top_left_y = 0;
         _player->jumping = 0;
-        _player->player_position[0] = 10; _player->player_position[1] = _player->floor_y_position;
+        _player->player_position[0] = 72; _player->player_position[1] = _player->floor_y_position;
         _player->tile_index_top_left = 0;
 
         set_sprite_data(0, 8, bloke);
