@@ -36,6 +36,8 @@ Spirit Friend Ghost Skater (including board) Sprite table (putting in main.c tem
             [14][15]
 */
 
+extern UINT8 completed_loops;
+
 BOOLEAN scene_collision(UINT8, UINT16, UINT16, UINT16);
 
 // UINT16 _map_width

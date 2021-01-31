@@ -20,6 +20,8 @@ UWORD counter = 0;
 
 const char blank_tile[1] = {0x00};
 
+UINT8 completed_loops = 0;
+
 UINT16 background_mapWidth = 20;
 UINT16 background_mapHeight = 200;
 
@@ -86,7 +88,7 @@ void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_h
     // if((joypad() & J_DOWN) && (scrollY < _map_height - 18)) { tileCounter++; }
 
     if(scrollY < _map_height - 18) { tileCounter++; }
-    else { counter = 0; scrollY = 0; }
+    else { completed_loops += 1; counter = 0; scrollY = 0; }
 
     if(tileCounter == 8)
     {
