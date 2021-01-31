@@ -35,6 +35,9 @@ Skater sprites table:
 
         small shadow for jumping or anything shadow related 28
             [28]
+
+        fallen down 29-30
+            [29][30]
 */
 
 struct player

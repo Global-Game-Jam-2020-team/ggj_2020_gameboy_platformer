@@ -61,7 +61,9 @@ void initialize_player(struct player *_player)
     _player->tile_index_top_left = 0;
     _player->player_width = 16;
 
-    set_sprite_data(0, 28, (unsigned char *)Skater);
+    set_sprite_data(0, 30, (unsigned char *)Skater);
+
+    // if crashed sprites 29 and 30 are a fallen down sprite
 
     sprites_to_use = 1;
 
