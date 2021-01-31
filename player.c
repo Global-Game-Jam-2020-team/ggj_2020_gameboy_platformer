@@ -4,31 +4,16 @@
 #include "game_configuration.h"
 #include "scene_configuration.h"
 
+#include "sprites/Skater.h"
+
 BOOLEAN has_player_been_intialized = FALSE;
 BOOLEAN has_reached_maximum_jump_height = FALSE;
 
 UINT8 jump_delay = 0;
 UINT8 jump_height = 10;
-
-unsigned char bloke[] =
-{
-  0x00,0x00,0x38,0x38,0x7C,0x44,0x7F,0x7F,
-  0x44,0x74,0x46,0x7C,0x40,0x78,0x24,0x3C,
-  0x18,0x3C,0x00,0x24,0x00,0x24,0x00,0x24,
-  0x00,0x24,0x00,0x36,0x00,0x00,0x00,0x00,
-  0x00,0x00,0x38,0x38,0x7C,0x44,0x7F,0x7F,
-  0x44,0x74,0x46,0x7C,0x40,0x78,0x24,0x3C,
-  0x18,0x3C,0x00,0x22,0x00,0x22,0x00,0x22,
-  0x00,0x23,0x00,0x30,0x00,0x00,0x00,0x00,
-  0x00,0x00,0x38,0x38,0x7C,0x44,0x7F,0x7F,
-  0x44,0x74,0x46,0x7C,0x40,0x78,0x24,0x3C,
-  0x18,0x3C,0x00,0x42,0x00,0x42,0x00,0x42,
-  0x00,0x42,0x00,0x63,0x00,0x00,0x00,0x00,
-  0x00,0x00,0x38,0x38,0x7C,0x44,0x7F,0x7F,
-  0x44,0x74,0x46,0x7C,0x40,0x78,0x24,0x3C,
-  0x18,0x3C,0x00,0x44,0x00,0x44,0x00,0x44,
-  0x00,0x64,0x00,0x06,0x00,0x00,0x00,0x00
-};
+UINT8 sprites_in_use = 0;
+UINT8 x_offset = 0; 
+UINT8 y_offset = 0;
 
 BOOLEAN initialize_player(struct player *_player)
 {
@@ -37,18 +22,43 @@ BOOLEAN initialize_player(struct player *_player)
         has_player_been_intialized = TRUE;
 
         _player->current_speed_y = 0;
-        _player->floor_y_position = 56;
         _player->gravity = -2;
+        _player->player_height = 24;
         _player->index_top_left_x = 0;
         _player->index_top_left_y = 0;
         _player->jumping = 0;
-        _player->player_position[0] = 72; _player->player_position[1] = _player->floor_y_position;
+        _player->player_state = 's';
+        _player->player_position[0] = 80; _player->player_position[1] = 45;
         _player->tile_index_top_left = 0;
+        _player->player_width = 16;
 
-        set_sprite_data(0, 8, bloke);
-        set_sprite_tile(0, 0);
+        set_sprite_data(0, 27, (unsigned char *)Skater);
 
-        move_sprite(0, _player->player_position[0], _player->player_position[1]);
+        for(sprites_in_use = 0; sprites_in_use < 8; sprites_in_use++)
+        {
+            set_sprite_tile(sprites_in_use, sprites_in_use);
+            
+            move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
+
+            if(sprites_in_use < 5)
+            {
+                x_offset += 8;
+
+                if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
+            }
+            else
+            {
+                x_offset -= 4;
+
+                if(x_offset == 0) 
+                {
+                    x_offset = 4;
+                    y_offset += 8;
+                }
+            }
+        }
+
+        x_offset = 0; y_offset = 0;
     }
 
     return has_player_been_intialized;
@@ -59,6 +69,42 @@ INT8 would_hit_surface(struct player *_player, UINT8 _projected_y_position)
     if(_projected_y_position >= _player->floor_y_position) { return _player->floor_y_position; }
 
     return -1;
+}
+
+unsigned char change_state(struct player *_player, char _state)
+{
+    switch(_state)
+    {
+        case 's':
+            for(sprites_in_use = 0; sprites_in_use < 8; sprites_in_use++)
+            {
+                set_sprite_tile(sprites_in_use, sprites_in_use);
+                
+                move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
+
+                if(sprites_in_use < 5)
+                {
+                    x_offset += 8;
+
+                    if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
+                }
+                else
+                {
+                    x_offset -= 4;
+
+                    if(x_offset == 0) 
+                    {
+                        x_offset = 4;
+                        y_offset += 8;
+                    }
+                }
+            }
+        break;
+    }
+
+    x_offset = 0; y_offset = 0;
+
+    return _player->player_state;
 }
 
 void player_jump(struct player *_player, UINT8 _sprite_id)
@@ -143,20 +189,63 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
 void player_movement(struct player *_player)
 {
     if((joypad() & J_A) || _player->jumping == 1) { player_jump(_player, 0); }
-    // if(joypad() & J_A) { scene_transition(background_one_map, 2, background_one_mapWidth); }
 
-    if (joypad() & J_LEFT && !scene_collision(1, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
+    if (joypad() & J_LEFT && _player->index_top_left_x > 0 /* && !scene_collision(1, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y) */)
     {
-        _player->player_position[0] -= 1;
+        _player->player_position[0] -= 2;
 
-        move_sprite(0, _player->player_position[0], _player->player_position[1]);
+        for(sprites_in_use = 0; sprites_in_use < 8; sprites_in_use++)
+        {            
+            move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
+
+            if(sprites_in_use < 5)
+            {
+                x_offset += 8;
+
+                if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
+            }
+            else
+            {
+                x_offset -= 4;
+
+                if(x_offset == 0) 
+                {
+                    x_offset = 4;
+                    y_offset += 8;
+                }
+            }
+        }
+
+        x_offset = 0; y_offset = 0;
     }
 
-    if (joypad() & J_RIGHT && !scene_collision(2, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
+    if (joypad() & J_RIGHT && _player->index_top_left_x < 18 /* && !scene_collision(2, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y) */)
     {
-        _player->player_position[0] += 1;
+        _player->player_position[0] += 2;
 
-        move_sprite(0, _player->player_position[0], _player->player_position[1]);
+        for(sprites_in_use = 0; sprites_in_use < 8; sprites_in_use++)
+        {            
+            move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
+
+            if(sprites_in_use < 5)
+            {
+                x_offset += 8;
+
+                if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
+            }
+            else
+            {
+                x_offset -= 4;
+
+                if(x_offset == 0) 
+                {
+                    x_offset = 4;
+                    y_offset += 8;
+                }
+            }
+        }
+
+        x_offset = 0; y_offset = 0;
     }
 }
 
@@ -165,14 +254,6 @@ void update_Player(struct player *_player)
     _player->index_top_left_x = (_player->player_position[0] - 8) / 8;
     _player->index_top_left_y = (_player->player_position[1] - 16) / 8;
     _player->tile_index_top_left = 32 * _player->index_top_left_y + _player->index_top_left_x;
-
-    // While the player is not jumping, check to see if they are touching the ground, if not, then pull them down. Afterwards update.
-    if(_player->jumping != 1 && !scene_collision(0, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
-    {
-        _player->player_position[1] -= _player->gravity * 2;
-
-        move_sprite(0, _player->player_position[0], _player->player_position[1]);
-    }
 }
 
 void player_core_loop(struct player *_player)
