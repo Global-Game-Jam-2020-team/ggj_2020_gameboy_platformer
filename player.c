@@ -4,10 +4,6 @@
 #include "game_configuration.h"
 #include "scene_configuration.h"
 
-// Delete below later
-#include "placeholder/background_one_m_b.c"
-// Delete above later
-
 BOOLEAN has_player_been_intialized = FALSE;
 BOOLEAN has_reached_maximum_jump_height = FALSE;
 

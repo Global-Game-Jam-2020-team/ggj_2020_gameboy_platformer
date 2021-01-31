@@ -1,16 +1,19 @@
 #include "scene_configuration.h"
 
-#include "placeholder/platformer_t_d.c"
-#include "placeholder/background_m_b.c"
+// Insert your tile and background #include below
+// #include "placeholder/platformer_t_d.c"
+// #include "placeholder/background_m_b.c"
+// Insert your tile and background #include above
 
 BOOLEAN has_scene_been_changed = FALSE;
 BOOLEAN has_scene_been_initialized = FALSE;
 
-UINT8 count_A = 0, count_B = 0;
+BYTE tileCounter = 0;
 
-UINT16 tile_index_X = 0, tile_index_X_Decrement = 0;
-UINT16 tile_Offset = 0;
-UINT16 position_X = 0;
+UBYTE scrollY = 0;
+UBYTE temporary_x_index = 0; UBYTE temporary_y_index = 0;
+
+UWORD counter = 0;
 
 const char blank_tile[1] = {0x00};
 
@@ -32,105 +35,60 @@ BOOLEAN scene_collision(UINT8 _direction, UINT16 _player_index_top_left, UINT16 
     return FALSE;
 }
 
-BOOLEAN scene_initialization(const char *_map, UINT16 _map_width, UINT16 _map_height)
+BOOLEAN scene_initialization(const char *_background, UINT16 _map_width)
 {
     if(!has_scene_been_initialized)
     {
         has_scene_been_initialized = TRUE;
 
-        set_bkg_data(0, 11, platformer_sprites);
-        set_bkg_tiles(0, 0, _map_width, _map_height, (unsigned char *)_map);
+        // Insert your tile data below
+        // set_bkg_data(0, 11, platformer_sprites);
+        // Insert your tile data above
+
+        counter = 0;
+        for(temporary_y_index = 0; temporary_y_index != 18; temporary_y_index++)
+        {
+            set_bkg_tiles( 0, temporary_y_index, 22, 1, (unsigned char*)(_background + counter));
+            counter = counter + _map_width;
+        }
     }
 
     return 1;
 }
 
-void scene_transition(const char *_background, UINT8 _direction, UINT8 _width_background)
+void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_height)
 {
-    // set_bkg_tiles(0, 0, 32, 18, (unsigned char *)_background);
-    // delay(1500);
-    // set_bkg_tiles(1, 0, 1, 1, (unsigned char *)_background[8]);
+    // if((joypad() & J_DOWN) && (scrollY < _map_height - 18)) { tileCounter++; }
 
-    UINT8 screen_panned_x = 0; UINT8 screen_panned_y = 0; 
-    // You will only need to pan / translate the screen in any direction by 20
-    UINT8 screen_tiles_panned = 0;
+    if(scrollY < _map_height - 18) { tileCounter++; }
+    else { counter = 0; scrollY = 0; }
 
-    for(; screen_tiles_panned < 20; screen_tiles_panned++)
+    if(tileCounter == 8)
     {
-        UINT8 temporary_screen_tiles_panned = 1 + screen_tiles_panned;
+        scrollY++;
+        tileCounter = 0;
 
-        // Right - Pan everything to the left
-        // First move the previous background to the left by one (8 pixels).
-        // Where gonna have to set the last column on the right side (19) of the screen to the first column of the new background
-        if(_direction == 2)
+        counter = _map_width * scrollY;
+
+        for(temporary_y_index = 0; temporary_y_index != 20; temporary_y_index++)
         {
-            // scroll_bkg(8, 0);
-            
-            for(; temporary_screen_tiles_panned > screen_tiles_panned; temporary_screen_tiles_panned--)
+            if(temporary_y_index != 0)
             {
-                UINT8 column_element_counter = 0;
-
-                for(; column_element_counter < 18; column_element_counter++) 
+                for(temporary_x_index = 0; temporary_x_index != _map_width; temporary_x_index++)
                 {
-                    // printf("%d\n", (UINT16)column_element_counter); delay(250);
-                    set_bkg_tiles(20 - temporary_screen_tiles_panned, column_element_counter, 1, 1, (unsigned char *)_background[(temporary_screen_tiles_panned - 1) + (_width_background * column_element_counter)]);
-                    delay(250);
+                    if(temporary_x_index < 20) { set_bkg_tiles(temporary_x_index, temporary_y_index - 1, 1, 1, (unsigned char*)(_background + counter)); }
+                    counter += 1;
                 }
             }
         }
     }
 }
 
-void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_height)
-{
-    // if((d_Pad & J_LEFT) && (tile_index_X != 0)){
-    //     position_X--;
-    //     tile_index_X_Decrement++;
-    //     scroll_bkg(-1, 0);
-    // }
-    
-    if((joypad() & J_RIGHT) && (tile_index_X < _map_width - 20)){
-        position_X++;
-        tile_index_X_Decrement--;
-        scroll_bkg(1, 0);
-    }
-
-    if(position_X == 8){
-        position_X = 0;
-
-        tile_index_X++;
-        tile_index_X_Decrement = 0;
-
-        tile_Offset = tile_index_X + 21;
-
-        count_B = tile_Offset % 32;
-
-        for(count_A = 0; count_A != _map_height; count_A++){     
-            set_bkg_tiles(count_B, count_A, 1, 1, (unsigned char *)(_background + tile_Offset));
-
-            tile_Offset = tile_Offset + _map_width;
-        }
-    }
-    
-    // if(tile_index_X_Decrement == 8){
-    //     position_X = 0;
-
-    //     tile_index_X--;
-    //     tile_index_X_Decrement = 0;
-
-    //     tile_Offset = tile_index_X - 1;
-
-    //     count_B = tile_Offset % 32;
-
-    //     for(count_A = 0; count_A != 18; count_A++){     
-    //         set_bkg_tiles(count_B, count_A, 1, 1, &(testMapTwo + tile_Offset));
-
-    //         tile_Offset = tile_Offset + 256;
-    //     }
-    // }
-}
-
 void scene_core_loop()
 {
-    scene_initialization(background_map, background_mapWidth, background_mapHeight);
+    // Insert your background information below
+    scene_initialization(background_two_map, background_two_mapWidth);
+
+    scrollable_screen(background_two_map, background_two_mapWidth, background_two_mapHeight);
+    // Insert your background information above
 }

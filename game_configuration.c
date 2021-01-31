@@ -7,7 +7,11 @@ UINT8 sprite_tile_number = 0;
 
 void initialize_game()
 {
-    DISPLAY_ON;
+    DISPLAY_OFF;
+
+	HIDE_SPRITES;
+	HIDE_WIN;
+	HIDE_BKG;
 
     init_sfx();
     init_music();
@@ -16,6 +20,8 @@ void initialize_game()
 
     SHOW_BKG;
     SHOW_SPRITES;
+
+    DISPLAY_ON;
 }
 
 void performatdelay(UINT8 numloops)
