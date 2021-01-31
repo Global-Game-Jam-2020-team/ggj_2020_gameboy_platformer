@@ -247,8 +247,49 @@ BOOLEAN intro_wait_for_input()
     return TRUE;
 }
 
-void player_movement(struct player *_player)
+void player_movement(struct player *_player, BOOLEAN position_for_outro)
 {
+    if (position_for_outro)
+    {
+        UINT8 outro_x = 60;
+
+        if (_player->player_position[0] < outro_x)
+        {
+            _player->player_position[0] += 1;
+        }
+
+        if (_player->player_position[0] > outro_x)
+        {
+            _player->player_position[0] -= 1;
+        }
+
+        for(sprites_in_use = 1; sprites_in_use < 9; sprites_in_use++)
+            {            
+                move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
+
+                if(sprites_in_use < 6)
+                {
+                    x_offset += 8;
+
+                    if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
+                }
+                else
+                {
+                    x_offset -= 4;
+
+                    if(x_offset == 0) 
+                    {
+                        x_offset = 4;
+                        y_offset += 8;
+                    }
+                }
+            }
+
+            x_offset = 0; y_offset = 0;
+
+        return;
+    }
+
     if((joypad() & J_A) || _player->jumping == 1) { player_jump(_player); }
 
     if(_player->jumping != 1)
@@ -332,7 +373,7 @@ BOOLEAN player_core_loop(struct player *_player, BOOLEAN scene_is_intro)
         // we are in gameplay
         if (completed_loops < max_completed_loops)
         {
-            player_movement(_player);
+            player_movement(_player, FALSE);
             
             update_Player(_player);
         }
@@ -341,41 +382,13 @@ BOOLEAN player_core_loop(struct player *_player, BOOLEAN scene_is_intro)
         if (completed_loops >= max_completed_loops)
         {
             // make sure player is in standing state for outro
-            // if (_player->player_state != 's')
-            // {
-            //     change_state(_player, 's');
-            // }
+            if (_player->player_state != 's')
+            {
+                change_state(_player, 's');
+            }
 
             // keey player in same position during outro
-            if (_player->player_position[0] != 40 || _player->player_position[1] != 45)
-            {
-                _player->player_position[0] = 60;
-                _player->player_position[1] = 45;
-
-                for(sprites_in_use = 1; sprites_in_use < 9; sprites_in_use++)
-                {            
-                    move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
-
-                    if(sprites_in_use < 6)
-                    {
-                        x_offset += 8;
-
-                        if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
-                    }
-                    else
-                    {
-                        x_offset -= 4;
-
-                        if(x_offset == 0) 
-                        {
-                            x_offset = 4;
-                            y_offset += 8;
-                        }
-                    }
-                }
-
-                x_offset = 0; y_offset = 0;
-            }
+            player_movement(_player, TRUE);
         }
     }
     else

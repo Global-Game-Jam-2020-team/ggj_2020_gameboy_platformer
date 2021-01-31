@@ -78,7 +78,7 @@ unsigned char change_state(struct player *, char);
 
 void player_jump(struct player *);
 
-void player_movement(struct player *);
+void player_movement(struct player *, BOOLEAN position_for_outro);
 
 void update_Player(struct player *);
 
