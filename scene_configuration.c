@@ -1,4 +1,6 @@
 #include "scene_configuration.h"
+#include "sprites\LongSkateBgTiles.h"
+#include "sprites\LongSkateBackground.h"
 
 // Insert your tile and background #include below
 // #include "placeholder/platformer_t_d.c"
@@ -17,19 +19,22 @@ UWORD counter = 0;
 
 const char blank_tile[1] = {0x00};
 
+UINT8 background_mapWidth = 20;
+UINT8 background_mapHeight = 200;
+
 // Down = 0 // Left = 1 // Right = 2 // Up = 3
 BOOLEAN scene_collision(UINT8 _direction, UINT16 _player_index_top_left, UINT16 _player_index_top_left_x, UINT16 _player_index_top_left_y)
 {
     switch(_direction)
     {
         // Down
-        case 0: if(background_map[_player_index_top_left + background_mapWidth] != blank_tile[0] || _player_index_top_left_y == background_mapHeight) { return TRUE; } break;
+        case 0: if(LongSkateBackground[_player_index_top_left + background_mapWidth] != blank_tile[0] || _player_index_top_left_y == background_mapHeight) { return TRUE; } break;
         // Left
-        case 1: if(background_map[_player_index_top_left] != blank_tile[0] || _player_index_top_left_x == 0) { return TRUE; } break;
+        case 1: if(LongSkateBackground[_player_index_top_left] != blank_tile[0] || _player_index_top_left_x == 0) { return TRUE; } break;
         // Right
-        case 2: if(background_map[_player_index_top_left + 1] != blank_tile[0] || _player_index_top_left_x == background_mapWidth) { return TRUE; } break;
+        case 2: if(LongSkateBackground[_player_index_top_left + 1] != blank_tile[0] || _player_index_top_left_x == background_mapWidth) { return TRUE; } break;
         // Up
-        case 3: if(background_map[_player_index_top_left - background_mapWidth] != blank_tile[0] || _player_index_top_left_y == 0) { return TRUE; } break;
+        case 3: if(LongSkateBackground[_player_index_top_left - background_mapWidth] != blank_tile[0] || _player_index_top_left_y == 0) { return TRUE; } break;
     }
     // Default
     return FALSE;
@@ -42,7 +47,7 @@ BOOLEAN scene_initialization(const char *_background, UINT16 _map_width)
         has_scene_been_initialized = TRUE;
 
         // Insert your tile data below
-        // set_bkg_data(0, 11, platformer_sprites);
+        set_bkg_data(0, 24, LongSkateBgTiles);
         // Insert your tile data above
 
         counter = 0;
@@ -87,8 +92,8 @@ void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_h
 void scene_core_loop()
 {
     // Insert your background information below
-    scene_initialization(background_two_map, background_two_mapWidth);
+    scene_initialization(LongSkateBackground, background_mapWidth);
 
-    scrollable_screen(background_two_map, background_two_mapWidth, background_two_mapHeight);
+    scrollable_screen(LongSkateBackground, background_mapWidth, background_mapHeight);
     // Insert your background information above
 }
