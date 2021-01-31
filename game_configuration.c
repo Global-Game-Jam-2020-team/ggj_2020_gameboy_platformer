@@ -1,6 +1,6 @@
 #include "game_configuration.h"
 
-#include "audio_configuration.h"
+// #include "audio_configuration.h"
 #include "music_configuration.h"
 
 UINT8 sprite_tile_number = 0;
@@ -13,8 +13,8 @@ void initialize_game()
 	HIDE_WIN;
 	HIDE_BKG;
 
-    init_sfx();
-    init_music();
+    // init_sfx();
+    // init_music();
 
     SWITCH_ROM_MBC1(2);
 

@@ -1,6 +1,6 @@
 #include "player.h"
 
-#include "audio_configuration.h"
+// #include "audio_configuration.h"
 #include "game_configuration.h"
 #include "scene_configuration.h"
 
@@ -9,59 +9,81 @@
 BOOLEAN has_player_been_intialized = FALSE;
 BOOLEAN has_reached_maximum_jump_height = FALSE;
 
+BOOLEAN intro_player_initialized = FALSE;
+
 UINT8 jump_delay = 0;
 UINT8 jump_height = 10;
 UINT8 sprites_in_use = 0;
 UINT8 x_offset = 0; 
 UINT8 y_offset = 0;
 
-BOOLEAN initialize_player(struct player *_player)
+void init_intro_player()
 {
-    if(!has_player_been_intialized)
+    UINT8 i;
+    intro_player_initialized = TRUE;
+    set_sprite_data(0, 28, (unsigned char *)Skater);
+
+    for (i = 22; i < 28; ++i)
     {
-        has_player_been_intialized = TRUE;
-
-        _player->current_speed_y = 0;
-        _player->gravity = -2;
-        _player->player_height = 24;
-        _player->index_top_left_x = 0;
-        _player->index_top_left_y = 0;
-        _player->jumping = 0;
-        _player->player_state = 's';
-        _player->player_position[0] = 80; _player->player_position[1] = 45;
-        _player->tile_index_top_left = 0;
-        _player->player_width = 16;
-
-        set_sprite_data(0, 27, (unsigned char *)Skater);
-
-        for(sprites_in_use = 0; sprites_in_use < 8; sprites_in_use++)
-        {
-            set_sprite_tile(sprites_in_use, sprites_in_use);
-            
-            move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
-
-            if(sprites_in_use < 5)
-            {
-                x_offset += 8;
-
-                if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
-            }
-            else
-            {
-                x_offset -= 4;
-
-                if(x_offset == 0) 
-                {
-                    x_offset = 4;
-                    y_offset += 8;
-                }
-            }
-        }
-
-        x_offset = 0; y_offset = 0;
+        set_sprite_tile(i - 22, i);
     }
 
-    return has_player_been_intialized;
+    printf("                                                                Skate or Cry");
+    printf("                             Press Start");
+
+    UINT8 x = 70;
+    UINT8 y = 80;
+    move_sprite(0, x, y);
+    move_sprite(1, x + 8, y);
+    move_sprite(2, x, y + 8);
+    move_sprite(3, x + 8, y + 8);
+    move_sprite(4, x, y + 16);
+    move_sprite(5, x + 8, y + 16);
+}
+
+void initialize_player(struct player *_player)
+{
+   
+    has_player_been_intialized = TRUE;
+
+    _player->current_speed_y = 0;
+    _player->gravity = -2;
+    _player->player_height = 24;
+    _player->index_top_left_x = 0;
+    _player->index_top_left_y = 0;
+    _player->jumping = 0;
+    _player->player_state = 's';
+    _player->player_position[0] = 80; _player->player_position[1] = 45;
+    _player->tile_index_top_left = 0;
+    _player->player_width = 16;
+
+    // set_sprite_data(0, 27, (unsigned char *)Skater);
+
+    for(sprites_in_use = 0; sprites_in_use < 8; sprites_in_use++)
+    {
+        set_sprite_tile(sprites_in_use, sprites_in_use);
+        
+        move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
+
+        if(sprites_in_use < 5)
+        {
+            x_offset += 8;
+
+            if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
+        }
+        else
+        {
+            x_offset -= 4;
+
+            if(x_offset == 0) 
+            {
+                x_offset = 4;
+                y_offset += 8;
+            }
+        }
+    }
+
+    x_offset = 0; y_offset = 0;
 }
 
 INT8 would_hit_surface(struct player *_player, UINT8 _projected_y_position)
@@ -114,7 +136,7 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
         // For Matt in case he reads this, I forgot that a negative minus a negative equals a positive for a quick second. Oops ( =
         jump_height += _player->gravity;
 
-        play_fx(0);
+        // play_fx(0);
 
         _player->jumping = 1;
     }
@@ -184,6 +206,16 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
             move_sprite(_sprite_id, _player->player_position[0], _player->player_position[1]);
         }
     }
+}
+
+BOOLEAN intro_wait_for_input()
+{
+    if (joypad() & J_START)
+    {
+       return FALSE;
+    }
+
+    return TRUE;
 }
 
 void player_movement(struct player *_player)
@@ -256,11 +288,28 @@ void update_Player(struct player *_player)
     _player->tile_index_top_left = 32 * _player->index_top_left_y + _player->index_top_left_x;
 }
 
-void player_core_loop(struct player *_player)
+BOOLEAN player_core_loop(struct player *_player, BOOLEAN scene_is_intro)
 {
-    initialize_player(_player);
+    if (!scene_is_intro)
+    {
+        if(!has_player_been_intialized)
+        {
+            initialize_player(_player);
+        }
 
-    player_movement(_player);
-    
-    update_Player(_player);
+        player_movement(_player);
+        
+        update_Player(_player);
+    }
+    else
+    {
+        if (!intro_player_initialized)
+        {
+            init_intro_player();
+        }
+
+        scene_is_intro = intro_wait_for_input();
+    }
+
+    return scene_is_intro;
 }

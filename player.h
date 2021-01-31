@@ -63,7 +63,11 @@ struct player
 
 extern BOOLEAN has_player_been_intialized;
 
-BOOLEAN initialize_player(struct player *);
+void init_intro_player();
+
+BOOLEAN intro_wait_for_input();
+
+void initialize_player(struct player *);
 
 INT8 would_hit_surface(struct player *, UINT8);
 
@@ -76,6 +80,6 @@ void player_movement(struct player *);
 void update_Player(struct player *);
 
 // Anything that happens within the player, will occurr in this loop
-void player_core_loop(struct player *);
+BOOLEAN player_core_loop(struct player *, BOOLEAN scene_is_intro);
 
 #endif
