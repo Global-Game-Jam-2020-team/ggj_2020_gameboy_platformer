@@ -1,6 +1,5 @@
 #include "player.h"
 
-// #include "audio_configuration.h"
 #include "game_configuration.h"
 #include "scene_configuration.h"
 
@@ -8,12 +7,14 @@
 
 BOOLEAN has_player_been_intialized = FALSE;
 BOOLEAN has_reached_maximum_jump_height = FALSE;
+BOOLEAN will_switch_state = FALSE;
 
 BOOLEAN intro_player_initialized = FALSE;
 
 UINT8 jump_delay = 0;
 UINT8 jump_height = 10;
 UINT8 sprites_in_use = 0;
+UINT8 sprites_to_use = 0;
 UINT8 x_offset = 0; 
 UINT8 y_offset = 0;
 
@@ -26,6 +27,7 @@ void init_intro_player()
     for (i = 22; i < 28; ++i)
     {
         set_sprite_tile(i - 22, i);
+        sprites_in_use += 1;
     }
 
     printf("                                                                Skate or Cry");
@@ -43,6 +45,8 @@ void init_intro_player()
 
 void initialize_player(struct player *_player)
 {
+    UINT8 temporary_counter = 0;
+    for(; temporary_counter < 40; temporary_counter++) { set_sprite_tile(temporary_counter, 0); }
    
     has_player_been_intialized = TRUE;
 
@@ -57,15 +61,19 @@ void initialize_player(struct player *_player)
     _player->tile_index_top_left = 0;
     _player->player_width = 16;
 
-    // set_sprite_data(0, 27, (unsigned char *)Skater);
+    set_sprite_data(0, 28, (unsigned char *)Skater);
 
-    for(sprites_in_use = 0; sprites_in_use < 8; sprites_in_use++)
+    sprites_to_use = 1;
+
+    for(sprites_in_use = 1; sprites_in_use < 9; sprites_in_use++)
     {
-        set_sprite_tile(sprites_in_use, sprites_in_use);
+        set_sprite_tile(sprites_to_use, sprites_in_use);
+        
+        sprites_to_use += 1;
         
         move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
 
-        if(sprites_in_use < 5)
+        if(sprites_in_use < 6)
         {
             x_offset += 8;
 
@@ -95,50 +103,86 @@ INT8 would_hit_surface(struct player *_player, UINT8 _projected_y_position)
 
 unsigned char change_state(struct player *_player, char _state)
 {
-    switch(_state)
+    if(will_switch_state)
     {
-        case 's':
-            for(sprites_in_use = 0; sprites_in_use < 8; sprites_in_use++)
-            {
-                set_sprite_tile(sprites_in_use, sprites_in_use);
-                
-                move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
+        UINT8 sprite_reset = 0;
 
-                if(sprites_in_use < 5)
+        will_switch_state = FALSE;
+
+        for(; sprite_reset < sprites_to_use; sprite_reset++) { set_sprite_tile(sprite_reset, 0); }
+        
+        sprites_to_use = 1;
+
+        switch(_state)
+        {
+            case 's':
+                for(sprites_in_use = 1; sprites_in_use < 9; sprites_in_use++)
                 {
-                    x_offset += 8;
+                    set_sprite_tile(sprites_to_use, sprites_in_use);
+                    
+                    sprites_to_use += 1;
+                    
+                    move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
 
-                    if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
-                }
-                else
-                {
-                    x_offset -= 4;
-
-                    if(x_offset == 0) 
+                    if(sprites_in_use < 6)
                     {
-                        x_offset = 4;
-                        y_offset += 8;
+                        x_offset += 8;
+
+                        if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
+                    }
+                    else
+                    {
+                        x_offset -= 4;
+
+                        if(x_offset == 0) 
+                        {
+                            x_offset = 4;
+                            y_offset += 8;
+                        }
                     }
                 }
-            }
-        break;
-    }
+            break;
+            case 'j':
+                for(sprites_in_use = 15; sprites_in_use < 22; sprites_in_use++)
+                {
+                    set_sprite_tile(sprites_to_use, sprites_in_use);
+                
+                    sprites_to_use += 1;
+                    
+                    move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
 
-    x_offset = 0; y_offset = 0;
+                    if(sprites_in_use < 20)
+                    {
+                        x_offset += 8;
+
+                        if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
+                    }
+                    else
+                    {
+                        x_offset -= 3;
+                        y_offset += 3;
+                    }
+                }
+            break;
+        }
+
+        x_offset = 0; y_offset = 0;
+    }
 
     return _player->player_state;
 }
 
-void player_jump(struct player *_player, UINT8 _sprite_id)
+void player_jump(struct player *_player)
 {
-    if(_player->jumping == 0 && scene_collision(0, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
+    if(_player->jumping == 0)
     {
-        // For Matt in case he reads this, I forgot that a negative minus a negative equals a positive for a quick second. Oops ( =
-        jump_height += _player->gravity;
-
         // play_fx(0);
 
         _player->jumping = 1;
+        _player->player_state = 'j';
+        will_switch_state = TRUE;
+
+        change_state(_player, _player->player_state);
     }
 
     if(_player->jumping == 1)
@@ -154,10 +198,6 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
                     jump_delay = 0;
 
                     jump_height -= 1;
-
-                    _player->player_position[1] -= jump_height;
-
-                    move_sprite(_sprite_id, _player->player_position[0], _player->player_position[1]);
                 }
             }
             else 
@@ -169,8 +209,7 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
         }
         else 
         {
-            // Did it again, negative minus a negative equals a positive
-            if(!scene_collision(0, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
+            if(jump_height != 10)
             {
                 jump_delay += 1;
 
@@ -179,19 +218,6 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
                     jump_delay = 0;
 
                     jump_height += 1;
-
-                    _player->player_position[1] += jump_height;
-
-                    _player->index_top_left_x = (_player->player_position[0] - 8) / 8;
-                    _player->index_top_left_y = (_player->player_position[1] - 16) / 8;
-                    _player->tile_index_top_left = 32 * _player->index_top_left_y + _player->index_top_left_x;
-                }
-
-                if(scene_collision(0, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y))
-                {
-                    UINT8 position_y_offset = _player->player_position[1] % 8;
-
-                    if(position_y_offset != 0) { _player->player_position[1] -= position_y_offset; }
                 }
             }
             else
@@ -201,9 +227,12 @@ void player_jump(struct player *_player, UINT8 _sprite_id)
                 jump_height = 10;
 
                 _player->jumping = 0;
-            }
 
-            move_sprite(_sprite_id, _player->player_position[0], _player->player_position[1]);
+                _player->player_state = 's';
+                will_switch_state = TRUE;
+
+                change_state(_player, _player->player_state);
+            }
         }
     }
 }
@@ -220,64 +249,67 @@ BOOLEAN intro_wait_for_input()
 
 void player_movement(struct player *_player)
 {
-    if((joypad() & J_A) || _player->jumping == 1) { player_jump(_player, 0); }
+    if((joypad() & J_A) || _player->jumping == 1) { player_jump(_player); }
 
-    if (joypad() & J_LEFT && _player->index_top_left_x > 0 /* && !scene_collision(1, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y) */)
+    if(_player->jumping != 1)
     {
-        _player->player_position[0] -= 2;
+        if (joypad() & J_LEFT && _player->index_top_left_x > 0 /* && !scene_collision(1, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y) */)
+        {
+            _player->player_position[0] -= 2;
 
-        for(sprites_in_use = 0; sprites_in_use < 8; sprites_in_use++)
-        {            
-            move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
+            for(sprites_in_use = 1; sprites_in_use < 9; sprites_in_use++)
+            {            
+                move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
 
-            if(sprites_in_use < 5)
-            {
-                x_offset += 8;
-
-                if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
-            }
-            else
-            {
-                x_offset -= 4;
-
-                if(x_offset == 0) 
+                if(sprites_in_use < 6)
                 {
-                    x_offset = 4;
-                    y_offset += 8;
+                    x_offset += 8;
+
+                    if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
+                }
+                else
+                {
+                    x_offset -= 4;
+
+                    if(x_offset == 0) 
+                    {
+                        x_offset = 4;
+                        y_offset += 8;
+                    }
                 }
             }
+
+            x_offset = 0; y_offset = 0;
         }
 
-        x_offset = 0; y_offset = 0;
-    }
+        if (joypad() & J_RIGHT && _player->index_top_left_x < 18 /* && !scene_collision(2, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y) */)
+        {
+            _player->player_position[0] += 2;
 
-    if (joypad() & J_RIGHT && _player->index_top_left_x < 18 /* && !scene_collision(2, _player->tile_index_top_left, _player->index_top_left_x, _player->index_top_left_y) */)
-    {
-        _player->player_position[0] += 2;
+            for(sprites_in_use = 1; sprites_in_use < 9; sprites_in_use++)
+            {            
+                move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
 
-        for(sprites_in_use = 0; sprites_in_use < 8; sprites_in_use++)
-        {            
-            move_sprite(sprites_in_use, _player->player_position[0] + x_offset, _player->player_position[1] + y_offset);
-
-            if(sprites_in_use < 5)
-            {
-                x_offset += 8;
-
-                if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
-            }
-            else
-            {
-                x_offset -= 4;
-
-                if(x_offset == 0) 
+                if(sprites_in_use < 6)
                 {
-                    x_offset = 4;
-                    y_offset += 8;
+                    x_offset += 8;
+
+                    if(x_offset == 16) {  x_offset = 0; y_offset += 8; }
+                }
+                else
+                {
+                    x_offset -= 4;
+
+                    if(x_offset == 0) 
+                    {
+                        x_offset = 4;
+                        y_offset += 8;
+                    }
                 }
             }
-        }
 
-        x_offset = 0; y_offset = 0;
+            x_offset = 0; y_offset = 0;
+        }
     }
 }
 

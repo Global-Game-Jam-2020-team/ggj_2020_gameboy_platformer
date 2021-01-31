@@ -76,7 +76,7 @@ INT8 would_hit_surface(struct player *, UINT8);
 
 unsigned char change_state(struct player *, char);
 
-void player_jump(struct player *, UINT8);
+void player_jump(struct player *);
 
 void player_movement(struct player *);
 
