@@ -15,9 +15,9 @@ Misc Assets Sprite table (putting in main.c temporarily)
             [04][05][06][07]
             [08][09][10][11]
 
-        Barricade (for crouching) 12-19
+        Barricade (for crouching) 12-17
             [12][13][14][15]
-            [16][17][18][19]
+            [16][xx][xx][17]
 */
 
 /*
@@ -36,7 +36,8 @@ Spirit Friend Ghost Skater (including board) Sprite table (putting in main.c tem
             [14][15]
 */
 
-extern UINT8 completed_loops;
+extern UINT16 completed_loops;
+extern UINT16 max_completed_loops;
 
 BOOLEAN scene_collision(UINT8, UINT16, UINT16, UINT16);
 
@@ -48,5 +49,8 @@ void scrollable_screen(const char *, UINT16, UINT16);
 void scene_core_loop(BOOLEAN scene_is_intro);
 
 void intro_initialization();
+
+// void ghost_friend();
+void init_ghost_friend();
 
 #endif

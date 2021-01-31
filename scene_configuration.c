@@ -2,6 +2,7 @@
 #include "sprites\LongSkateBgTiles.h"
 #include "sprites\LongSkateBackground.h"
 #include "sprites\MiscAssets.h"
+#include "sprites\SpiritSkater.h"
 
 // Insert your tile and background #include below
 // #include "placeholder/platformer_t_d.c"
@@ -20,16 +21,25 @@ UWORD counter = 0;
 
 const char blank_tile[1] = {0x00};
 
-UINT8 completed_loops = 0;
+UINT16 completed_loops = 0;
+UINT16 max_completed_loops = 1;
+// UINT8 ghost_counter = 0;
 
 UINT16 background_mapWidth = 20;
 UINT16 background_mapHeight = 200;
 
 BOOLEAN intro_initialized = FALSE;
+BOOLEAN outro_initialized = FALSE;
 
 // Down = 0 // Left = 1 // Right = 2 // Up = 3
 BOOLEAN scene_collision(UINT8 _direction, UINT16 _player_index_top_left, UINT16 _player_index_top_left_x, UINT16 _player_index_top_left_y)
 {
+    // no need for collision because we are in outro now
+    if (completed_loops >= max_completed_loops)
+    {
+        return FALSE;
+    }
+
     switch(_direction)
     {
         // Down
@@ -66,9 +76,56 @@ void intro_initialization()
     move_sprite(9, x + 8, y + 8);
 }
 
+void init_ghost_friend()
+{
+    /*
+    Ghost Friend
+        Solid Outline 0-7
+            [00][01]
+            [02][03]
+            [04][05]
+            [06][07]
+
+        Thinner / Lighter Outline 8-15
+            [08][09]
+            [10][11]
+            [12][13]
+            [14][15]
+    */
+
+    // we are going to overwrite crouching/jumping sprites for player with ghost sprites because player doesnt need to jump/crouch in outro
+    // 9-14 crouching
+    // 15-20 jumping
+    set_sprite_data(9, 16, SpiritSkater);
+
+    UINT8 i;
+   
+    for (i = 9; i < 17; ++i)
+    {
+        if (outro_initialized)
+        {
+            set_sprite_tile(i, i);
+        }
+        else
+        {
+            set_sprite_tile(i, i + 8);
+        }
+    }
+
+    UINT8 x = 100;
+    UINT8 y = 45;
+    move_sprite(9, x, y);
+    move_sprite(10, x + 8, y);
+    move_sprite(11, x, y + 8);
+    move_sprite(12, x + 8, y + 8);
+    move_sprite(13, x, y + 16);
+    move_sprite(14, x + 8, y + 16);
+    move_sprite(15, x, y + 24);
+    move_sprite(16, x + 8, y + 24);
+}
+
 void scene_initialization(const char *_background, UINT16 _map_width)
 {
-    
     has_scene_been_initialized = TRUE;
 
     // Insert your tile data below
@@ -87,8 +144,20 @@ void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_h
 {
     // if((joypad() & J_DOWN) && (scrollY < _map_height - 18)) { tileCounter++; }
 
-    if(scrollY < _map_height - 18) { tileCounter++; }
-    else { completed_loops += 1; counter = 0; scrollY = 0; }
+    if(scrollY < _map_height - 18)
+    { 
+        tileCounter++;
+    }
+    else
+    { 
+        if (completed_loops < max_completed_loops)
+        {
+            completed_loops += 1;
+        }
+
+        counter = 0;
+        scrollY = 0;
+    }
 
     if(tileCounter == 8)
     {
@@ -106,10 +175,10 @@ void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_h
     }
 }
 
-void intro_screen()
-{
+// void ghost_friend()
+// {
 
-}
+// }
 
 void scene_core_loop(BOOLEAN scene_is_intro)
 {
@@ -120,7 +189,27 @@ void scene_core_loop(BOOLEAN scene_is_intro)
             scene_initialization(LongSkateBackground, LongSkateBackgroundWidth);
         }
 
-        scrollable_screen(LongSkateBackground, LongSkateBackgroundWidth, LongSkateBackgroundHeight);
+        // if (completed_loops < max_completed_loops)
+        // {
+            scrollable_screen(LongSkateBackground, LongSkateBackgroundWidth, LongSkateBackgroundHeight);
+        // }
+
+        // we are in outro now
+        if (completed_loops >= max_completed_loops)
+        {
+            init_ghost_friend();
+
+            if (completed_loops < 80)
+            {
+                completed_loops++;
+            }
+            else
+            {
+                outro_initialized = TRUE;
+            }
+
+            // ghost_friend();
+        }
     }
     else
     {
