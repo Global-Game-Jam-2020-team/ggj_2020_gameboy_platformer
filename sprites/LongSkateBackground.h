@@ -7,7 +7,7 @@
  Info:
    Section       : 
    Bank          : 0
-   Map size      : 20 x 200
+   Map size      : 20 x 71
    Tile set      : C:\Users\mattm\dev\c\gameboy\ggj_2020_gameboy_platformer\misc_assets\BackgroundTiles.gbr
    Plane count   : 1 plane (8 bits)
    Plane order   : Tiles are continues
@@ -19,7 +19,7 @@
 */
 
 #define LongSkateBackgroundWidth 20
-#define LongSkateBackgroundHeight 200
+#define LongSkateBackgroundHeight 71
 #define LongSkateBackgroundBank 0
 
 extern const char LongSkateBackground[];

@@ -3,6 +3,6 @@
 
 #include "music/gbt_player.h"
 
-void init_music();
+void init_music(const char name);
 
 #endif

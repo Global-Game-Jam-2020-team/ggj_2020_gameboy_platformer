@@ -4,6 +4,8 @@
 #include "sprites\MiscAssets.h"
 #include "sprites\SpiritSkater.h"
 
+#include "music_configuration.h"
+
 // Insert your tile and background #include below
 // #include "placeholder/platformer_t_d.c"
 // #include "placeholder/background_m_b.c"
@@ -26,7 +28,7 @@ UINT16 max_completed_loops = 1;
 // UINT8 ghost_counter = 0;
 
 UINT16 background_mapWidth = 20;
-UINT16 background_mapHeight = 200;
+UINT16 background_mapHeight = 50;
 
 BOOLEAN intro_initialized = FALSE;
 BOOLEAN outro_initialized = FALSE;
@@ -74,6 +76,9 @@ void intro_initialization()
     move_sprite(7, x + 8, y);
     move_sprite(8, x, y + 8);
     move_sprite(9, x + 8, y + 8);
+
+    init_music('i');
+    SWITCH_ROM_MBC1(2);
 }
 
 void init_ghost_friend()
@@ -129,15 +134,18 @@ void scene_initialization(const char *_background, UINT16 _map_width)
     has_scene_been_initialized = TRUE;
 
     // Insert your tile data below
-    set_bkg_data(0, 26, LongSkateBgTiles);
+    set_bkg_data(0, 13, LongSkateBgTiles);
     // Insert your tile data above
 
     counter = 0;
-    for(temporary_y_index = 0; temporary_y_index != 18; temporary_y_index++)
+    for(temporary_y_index = 0; temporary_y_index != 13; temporary_y_index++)
     {
         set_bkg_tiles( 0, temporary_y_index, 22, 1, (unsigned char*)(_background + counter));
         counter = counter + _map_width;
     }
+
+    init_music('g');
+    SWITCH_ROM_MBC1(2);
 }
 
 void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_height)
@@ -199,16 +207,20 @@ void scene_core_loop(BOOLEAN scene_is_intro)
         {
             init_ghost_friend();
 
-            if (completed_loops < 80)
+            if (completed_loops < 160)
             {
                 completed_loops++;
             }
             else
             {
-                outro_initialized = TRUE;
-            }
+                if (!outro_initialized)
+                {
+                    outro_initialized = TRUE;
 
-            // ghost_friend();
+                    init_music('i');
+                    SWITCH_ROM_MBC1(2);
+                }
+            }
         }
     }
     else
