@@ -6,32 +6,35 @@
 /*
 Skater sprites table:
     Skater.c
-        standing 0-5
-            [00][01]
-            [02][03]
-            [04][05]
+        standing 1-6
+            [01][02]
+            [03][04]
+            [05][06]
 
-        skateboard 6-7
-            [06]
+        skateboard 7-8
             [07]
+            [08]
 
-        crouching: 8-13
-            [08][09]
-            [10][11]
-            [12][13]
+        crouching: 9-14
+            [09][10]
+            [11][12]
+            [13][14]
         
-        jumping 14-19
-            [14][15]
-            [16][17]
-            [18][19]
+        jumping 15-20
+            [15][16]
+            [17][18]
+            [19][20]
 
-        skateboard while jumping 20
-            [20]
+        skateboard while jumping 21
+            [21]
 
-        backside looking at grave 21-26
-            [21][22]
-            [23][24]
-            [25][26]
+        backside looking at grave 22-27
+            [22][23]
+            [24][25]
+            [26][27]
+
+        small shadow for jumping or anything shadow related 28
+            [28]
 */
 
 struct player
