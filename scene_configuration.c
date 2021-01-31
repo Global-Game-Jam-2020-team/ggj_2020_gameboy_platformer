@@ -75,15 +75,12 @@ void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_h
 
         counter = _map_width * scrollY;
 
-        for(temporary_y_index = 0; temporary_y_index != 20; temporary_y_index++)
+        for(temporary_y_index = 1; temporary_y_index != 20; temporary_y_index++)
         {
-            if(temporary_y_index != 0)
+            for(temporary_x_index = 0; temporary_x_index != _map_width; temporary_x_index++)
             {
-                for(temporary_x_index = 0; temporary_x_index != _map_width; temporary_x_index++)
-                {
-                    if(temporary_x_index < 20) { set_bkg_tiles(temporary_x_index, temporary_y_index - 1, 1, 1, (unsigned char*)(_background + counter)); }
-                    counter += 1;
-                }
+                if(temporary_x_index < 20) { set_bkg_tiles(temporary_x_index, temporary_y_index - 1, 1, 1, (unsigned char*)(_background + counter)); }
+                counter += 1;
             }
         }
     }
