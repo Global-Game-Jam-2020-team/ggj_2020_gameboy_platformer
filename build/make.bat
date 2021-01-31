@@ -18,6 +18,6 @@ c:\gbdk\bin\lcc -Wa-l -Wl-m -Wf--debug -Wl-y -Wl-w  -c -o build\gbt_player_bank1
 
 @echo off
 c:\gbdk\bin\lcc -Wa-l -Wl-m -Wf--debug -Wl-y -Wl-w -c -o build\main.o main.c
-c:\gbdk\bin\lcc -Wa-l -Wl-m -Wf--debug -Wl-y -Wl-w -o main.gb build\main.o build\output.o build\gbt_player.o build\gbt_player_bank1.o audio_configuration.c music_configuration.c game_configuration.c player.c scene_configuration.c
+c:\gbdk\bin\lcc -Wa-l -Wl-m -Wf--debug -Wl-y -Wl-w -o main.gb build\main.o build\output.o build\gbt_player.o build\gbt_player_bank1.o audio_configuration.c music_configuration.c game_configuration.c player.c scene_configuration.c sprites\Skater.c sprites\SpiritSkater.c sprites\MiscAssets.c
 
 del build\*.o build\*.lst
