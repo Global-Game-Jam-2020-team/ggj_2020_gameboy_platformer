@@ -7,7 +7,7 @@
 BOOLEAN scene_collision(UINT8, UINT16, UINT16, UINT16);
 
 // UINT16 _map_width
-BOOLEAN scene_initialization(const char *, UINT16);
+void scene_initialization(const char *, UINT16);
 
 void scrollable_screen(const char *, UINT16, UINT16);
 

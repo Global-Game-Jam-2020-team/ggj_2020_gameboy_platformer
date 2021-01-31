@@ -40,25 +40,21 @@ BOOLEAN scene_collision(UINT8 _direction, UINT16 _player_index_top_left, UINT16 
     return FALSE;
 }
 
-BOOLEAN scene_initialization(const char *_background, UINT16 _map_width)
+void scene_initialization(const char *_background, UINT16 _map_width)
 {
-    if(!has_scene_been_initialized)
+    
+    has_scene_been_initialized = TRUE;
+
+    // Insert your tile data below
+    set_bkg_data(0, 26, LongSkateBgTiles);
+    // Insert your tile data above
+
+    counter = 0;
+    for(temporary_y_index = 0; temporary_y_index != 18; temporary_y_index++)
     {
-        has_scene_been_initialized = TRUE;
-
-        // Insert your tile data below
-        set_bkg_data(0, 26, LongSkateBgTiles);
-        // Insert your tile data above
-
-        counter = 0;
-        for(temporary_y_index = 0; temporary_y_index != 18; temporary_y_index++)
-        {
-            set_bkg_tiles( 0, temporary_y_index, 22, 1, (unsigned char*)(_background + counter));
-            counter = counter + _map_width;
-        }
+        set_bkg_tiles( 0, temporary_y_index, 22, 1, (unsigned char*)(_background + counter));
+        counter = counter + _map_width;
     }
-
-    return 1;
 }
 
 void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_height)
@@ -86,8 +82,11 @@ void scrollable_screen(const char *_background, UINT16 _map_width, UINT16 _map_h
 
 void scene_core_loop()
 {
-    // Insert your background information below
-    scene_initialization(LongSkateBackground, LongSkateBackgroundWidth);
+    if(!has_scene_been_initialized)
+    {
+        // Insert your background information below
+        scene_initialization(LongSkateBackground, LongSkateBackgroundWidth);
+    }
 
     scrollable_screen(LongSkateBackground, LongSkateBackgroundWidth, LongSkateBackgroundHeight);
     // Insert your background information above
