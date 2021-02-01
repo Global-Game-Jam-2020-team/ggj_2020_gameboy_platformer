@@ -1,0 +1,1515 @@
+                                      1 ;-------------------------------------------------------------------------------
+                                      2 ;
+                                      3 ; GBT Player v2.1.2
+                                      4 ;
+                                      5 ; Copyright (c) 2009-2018, Antonio Niño Díaz <antonio_nd@outlook.com>
+                                      6 ; All rights reserved.
+                                      7 ;
+                                      8 ; Redistribution and use in source and binary forms, with or without
+                                      9 ; modification, are permitted provided that the following conditions are met:
+                                     10 ;
+                                     11 ; * Redistributions of source code must retain the above copyright notice, this
+                                     12 ;  list of conditions and the following disclaimer.
+                                     13 ;
+                                     14 ; * Redistributions in binary form must reproduce the above copyright notice,
+                                     15 ;   this list of conditions and the following disclaimer in the documentation
+                                     16 ;   and/or other materials provided with the distribution.
+                                     17 ;
+                                     18 ; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+                                     19 ; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+                                     20 ; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+                                     21 ; DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+                                     22 ; FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+                                     23 ; DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+                                     24 ; SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+                                     25 ; CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+                                     26 ; OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+                                     27 ; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+                                     28 ;
+                                     29 ;-------------------------------------------------------------------------------
+                                     30 
+                           00FF10    31 	.NR10 = 0xFF10
+                           00FF11    32 	.NR11 = 0xFF11
+                           00FF12    33 	.NR12 = 0xFF12
+                           00FF13    34 	.NR13 = 0xFF13
+                           00FF14    35 	.NR14 = 0xFF14
+                           00FF16    36 	.NR21 = 0xFF16
+                           00FF17    37 	.NR22 = 0xFF17
+                           00FF18    38 	.NR23 = 0xFF18
+                           00FF19    39 	.NR24 = 0xFF19
+                           00FF1A    40 	.NR30 = 0xFF1A
+                           00FF1B    41 	.NR31 = 0xFF1B
+                           00FF1C    42 	.NR32 = 0xFF1C
+                           00FF1D    43 	.NR33 = 0xFF1D
+                           00FF1E    44 	.NR34 = 0xFF1E
+                           00FF20    45 	.NR41 = 0xFF20
+                           00FF21    46 	.NR42 = 0xFF21
+                           00FF22    47 	.NR43 = 0xFF22
+                           00FF23    48 	.NR44 = 0xFF23
+                           00FF24    49 	.NR50 = 0xFF24
+                           00FF25    50 	.NR51 = 0xFF25
+                           00FF26    51 	.NR52 = 0xFF26
+                                     52 
+                                     53 ;-------------------------------------------------------------------------------
+                                     54 
+                                     55 	.area	_CODE_1
+                                     56 
+                                     57 ;-------------------------------------------------------------------------------
+                                     58 
+      000000                         59 gbt_wave: ; 8 sounds
+      000000 A5 D7 C9 E1 BC 9A 76    60 	.DB	0xA5,0xD7,0xC9,0xE1,0xBC,0x9A,0x76,0x31,0x0C,0xBA,0xDE,0x60,0x1B,0xCA,0x03,0x93 ; random :P
+             31 0C BA DE 60 1B CA
+             03 93
+      000010 F0 E1 D2 C3 B4 A5 96    61 	.DB	0xF0,0xE1,0xD2,0xC3,0xB4,0xA5,0x96,0x87,0x78,0x69,0x5A,0x4B,0x3C,0x2D,0x1E,0x0F
+             87 78 69 5A 4B 3C 2D
+             1E 0F
+      000020 FD EC DB CA B9 A8 97    62 	.DB	0xFD,0xEC,0xDB,0xCA,0xB9,0xA8,0x97,0x86,0x79,0x68,0x57,0x46,0x35,0x24,0x13,0x02 ; little up-downs
+             86 79 68 57 46 35 24
+             13 02
+      000030 DE FE DC BA 9A A9 87    63 	.DB	0xDE,0xFE,0xDC,0xBA,0x9A,0xA9,0x87,0x77,0x88,0x87,0x65,0x56,0x54,0x32,0x10,0x12
+             77 88 87 65 56 54 32
+             10 12
+      000040 AB CD EF ED CB A0 12    64 	.DB	0xAB,0xCD,0xEF,0xED,0xCB,0xA0,0x12,0x3E,0xDC,0xBA,0xBC,0xDE,0xFE,0xDC,0x32,0x10 ; triangular broken
+             3E DC BA BC DE FE DC
+             32 10
+      000050 FF EE DD CC BB AA 99    65 	.DB	0xFF,0xEE,0xDD,0xCC,0xBB,0xAA,0x99,0x88,0x77,0x66,0x55,0x44,0x33,0x22,0x11,0x00 ; triangular
+             88 77 66 55 44 33 22
+             11 00
+      000060 FF FF FF FF FF FF FF    66 	.DB	0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 ; square 50%
+             FF 00 00 00 00 00 00
+             00 00
+      000070 79 BC DE EF FF EE DC    67 	.DB	0x79,0xBC,0xDE,0xEF,0xFF,0xEE,0xDC,0xB9,0x75,0x43,0x21,0x10,0x00,0x11,0x23,0x45 ; sine
+             B9 75 43 21 10 00 11
+             23 45
+                                     68 
+      000080                         69 gbt_noise: ; 16 sounds
+                                     70 	; 7 bit
+      000080 5F 5B 4B 2F 3B 58 1F    71 	.DB	0x5F,0x5B,0x4B,0x2F,0x3B,0x58,0x1F,0x0F
+             0F
+                                     72 	; 15 bit
+      000088 90 80 70 50 00          73 	.DB	0x90,0x80,0x70,0x50,0x00
+      00008D 67 63 53                74 	.DB	0x67,0x63,0x53
+                                     75 
+      000090                         76 gbt_frequencies:
+      000090 2C 00 9C 00 06 01 6B    77 	.DW	  44,  156,  262,  363,  457,  547,  631,  710,  786,  854,  923,  986
+             01 C9 01 23 02 77 02
+             C6 02 12 03 56 03 9B
+             03 DA 03
+      0000A8 16 04 4E 04 83 04 B5    78 	.DW	1046, 1102, 1155, 1205, 1253, 1297, 1339, 1379, 1417, 1452, 1486, 1517
+             04 E5 04 11 05 3B 05
+             63 05 89 05 AC 05 CE
+             05 ED 05
+      0000C0 0A 06 27 06 42 06 5B    79 	.DW	1546, 1575, 1602, 1627, 1650, 1673, 1694, 1714, 1732, 1750, 1767, 1783
+             06 72 06 89 06 9E 06
+             B2 06 C4 06 D6 06 E7
+             06 F7 06
+      0000D8 06 07 14 07 21 07 2D    80 	.DW	1798, 1812, 1825, 1837, 1849, 1860, 1871, 1881, 1890, 1899, 1907, 1915
+             07 39 07 44 07 4F 07
+             59 07 62 07 6B 07 73
+             07 7B 07
+      0000F0 83 07 8A 07 90 07 97    81 	.DW	1923, 1930, 1936, 1943, 1949, 1954, 1959, 1964, 1969, 1974, 1978, 1982
+             07 9D 07 A2 07 A7 07
+             AC 07 B1 07 B6 07 BA
+             07 BE 07
+      000108 C1 07 C4 07 C8 07 CB    82 	.DW	1985, 1988, 1992, 1995, 1998, 2001, 2004, 2006, 2009, 2011, 2013, 2015
+             07 CE 07 D1 07 D4 07
+             D6 07 D9 07 DB 07 DD
+             07 DF 07
+                                     83 
+                                     84 ;-------------------------------------------------------------------------------
+                                     85 
+      000120                         86 _gbt_get_freq_from_index: ; a = index, bc = returned freq
+      000120 21 90 00                87 	ld	hl,#gbt_frequencies
+      000123 4F                      88 	ld	c,a
+      000124 06 00                   89 	ld	b,#0
+      000126 09                      90 	add	hl,bc
+      000127 09                      91 	add	hl,bc
+      000128 4E                      92 	ld	c,(hl)
+      000129 23                      93 	inc	hl
+      00012A 46                      94 	ld	b,(hl)
+      00012B C9                      95 	ret
+                                     96 
+                                     97 ;-------------------------------------------------------------------------------
+                                     98 ;---------------------------------- Channel 1 ----------------------------------
+                                     99 ;-------------------------------------------------------------------------------
+                                    100 
+      00012C                        101 gbt_channel_1_handle:: ; de = info
+                                    102 
+      00012C FA 00 00               103 	ld	a,(gbt_channels_enabled)
+      00012F E6 01                  104 	and	a,#0x01
+      000131 20 14                  105 	jr	nz,channel1_enabled$
+                                    106 
+                                    107 	; Channel is disabled. Increment pointer as needed
+                                    108 
+      000133 1A                     109 	ld	a,(de)
+      000134 13                     110 	inc	de
+      000135 CB 7F                  111 	bit	7,a
+      000137 20 06                  112 	jr	nz,ch1_more_bytes$
+      000139 CB 77                  113 	bit	6,a
+      00013B 28 09                  114 	jr	z,ch1_no_more_bytes_this_channel$
+                                    115 
+      00013D 18 06                  116 	jr	ch1_one_more_byte$
+                                    117 
+      00013F                        118 ch1_more_bytes$:
+                                    119 
+      00013F 1A                     120 	ld	a,(de)
+      000140 13                     121 	inc	de
+      000141 CB 7F                  122 	bit	7,a
+      000143 28 01                  123 	jr	z,ch1_no_more_bytes_this_channel$
+                                    124 
+      000145                        125 ch1_one_more_byte$:
+                                    126 
+      000145 13                     127 	inc	de
+                                    128 
+      000146                        129 ch1_no_more_bytes_this_channel$:
+                                    130 
+      000146 C9                     131 	ret
+                                    132 
+      000147                        133 channel1_enabled$:
+                                    134 
+                                    135 	; Channel 1 is enabled
+                                    136 
+      000147 1A                     137 	ld	a,(de)
+      000148 13                     138 	inc	de
+                                    139 
+      000149 CB 7F                  140 	bit	7,a
+      00014B 20 24                  141 	jr	nz,ch1_has_frequency$
+                                    142 
+                                    143 	; Not frequency
+                                    144 
+      00014D CB 77                  145 	bit	6,a
+      00014F 20 0E                  146 	jr	nz,ch1_instr_effects$
+                                    147 
+                                    148 	; Set volume or NOP
+                                    149 
+      000151 CB 6F                  150 	bit	5,a
+      000153 20 01                  151 	jr	nz,ch1_just_set_volume$
+                                    152 
+                                    153 	; NOP
+                                    154 
+      000155 C9                     155 	ret
+                                    156 
+      000156                        157 ch1_just_set_volume$:
+                                    158 
+                                    159 	; Set volume
+                                    160 
+      000156 E6 0F                  161 	and	a,#0x0F
+      000158 CB 37                  162 	swap	a
+      00015A EA 00 00               163 	ld	(gbt_vol+0),a
+                                    164 
+      00015D 18 4C                  165 	jr	refresh_channel1_regs$
+                                    166 
+      00015F                        167 ch1_instr_effects$:
+                                    168 
+                                    169 	; Set instrument and effect
+                                    170 
+      00015F 47                     171 	ld	b,a ; save byte
+                                    172 
+      000160 E6 30                  173 	and	a,#0x30
+      000162 CB 27                  174 	sla	a
+      000164 CB 27                  175 	sla	a
+      000166 EA 00 00               176 	ld	(gbt_instr+0),a ; Instrument
+                                    177 
+      000169 78                     178 	ld	a,b ; restore byte
+                                    179 
+      00016A E6 0F                  180 	and	a,#0x0F ; a = effect
+                                    181 
+      00016C CD 2D 02               182 	call	gbt_channel_1_set_effect
+                                    183 
+      00016F 18 3A                  184 	jr	refresh_channel1_regs$
+                                    185 
+      000171                        186 ch1_has_frequency$:
+                                    187 
+                                    188 	; Has frequency
+                                    189 
+      000171 E6 7F                  190 	and	a,#0x7F
+      000173 EA 00 00               191 	ld	(gbt_arpeggio_freq_index+0*3),a
+                                    192 	; This destroys hl and a. Returns freq in bc
+      000176 CD 20 01               193 	call	_gbt_get_freq_from_index
+                                    194 
+      000179 79                     195 	ld	a,c
+      00017A EA 00 00               196 	ld	(gbt_freq+0*2+0),a
+      00017D 78                     197 	ld	a,b
+      00017E EA 01 00               198 	ld	(gbt_freq+0*2+1),a ; Get frequency
+                                    199 
+      000181 1A                     200 	ld	a,(de)
+      000182 13                     201 	inc	de
+                                    202 
+      000183 CB 7F                  203 	bit	7,a
+      000185 20 14                  204 	jr	nz,ch1_freq_instr_and_effect$
+                                    205 
+                                    206 	; Freq + Instr + Volume
+                                    207 
+      000187 47                     208 	ld	b,a ; save byte
+                                    209 
+      000188 E6 30                  210 	and	a,#0x30
+      00018A CB 27                  211 	sla	a
+      00018C CB 27                  212 	sla	a
+      00018E EA 00 00               213 	ld	(gbt_instr+0),a ; Instrument
+                                    214 
+      000191 78                     215 	ld	a,b ; restore byte
+                                    216 
+      000192 E6 0F                  217 	and	a,#0x0F ; a = volume
+                                    218 
+      000194 CB 37                  219 	swap	a
+      000196 EA 00 00               220 	ld	(gbt_vol+0),a
+                                    221 
+      000199 18 10                  222 	jr	refresh_channel1_regs$
+                                    223 
+      00019B                        224 ch1_freq_instr_and_effect$:
+                                    225 
+                                    226 	; Freq + Instr + Effect
+                                    227 
+      00019B 47                     228 	ld	b,a ; save byte
+                                    229 
+      00019C E6 30                  230 	and	a,#0x30
+      00019E CB 27                  231 	sla	a
+      0001A0 CB 27                  232 	sla	a
+      0001A2 EA 00 00               233 	ld	(gbt_instr+0),a ; Instrument
+                                    234 
+      0001A5 78                     235 	ld	a,b ; restore byte
+                                    236 
+      0001A6 E6 0F                  237 	and	a,#0x0F ; a = effect
+                                    238 
+      0001A8 CD 2D 02               239 	call	gbt_channel_1_set_effect
+                                    240 
+                                    241 	;jr	refresh_channel1_regs$
+                                    242 
+      0001AB                        243 refresh_channel1_regs$:
+                                    244 
+                                    245 	; fall through!
+                                    246 
+                                    247 ; -----------------
+                                    248 
+      0001AB                        249 channel1_refresh_registers:
+                                    250 
+      0001AB AF                     251 	xor	a,a
+      0001AC EA 10 FF               252 	ld	(#.NR10),a
+      0001AF FA 00 00               253 	ld	a,(gbt_instr+0)
+      0001B2 EA 11 FF               254 	ld	(#.NR11),a
+      0001B5 FA 00 00               255 	ld	a,(gbt_vol+0)
+      0001B8 EA 12 FF               256 	ld	(#.NR12),a
+      0001BB FA 00 00               257 	ld	a,(gbt_freq+0*2+0)
+      0001BE EA 13 FF               258 	ld	(#.NR13),a
+      0001C1 FA 01 00               259 	ld	a,(gbt_freq+0*2+1)
+      0001C4 F6 80                  260 	or	a,#0x80 ; start
+      0001C6 EA 14 FF               261 	ld	(#.NR14),a
+                                    262 
+      0001C9 C9                     263 	ret
+                                    264 
+                                    265 ; ------------------
+                                    266 
+      0001CA                        267 channel1_update_effects: ; returns 1 in a if it is needed to update sound registers
+                                    268 
+                                    269 	; Cut note
+                                    270 	; --------
+                                    271 
+      0001CA FA 00 00               272 	ld	a,(gbt_cut_note_tick+0)
+      0001CD 21 00 00               273 	ld	hl,#gbt_ticks_elapsed
+      0001D0 BE                     274 	cp	a,(hl)
+      0001D1 C2 E1 01               275 	jp	nz,ch1_dont_cut$
+                                    276 
+      0001D4 3D                     277 	dec	a ; a = 0xFF
+      0001D5 EA 00 00               278 	ld	(gbt_cut_note_tick+0),a ; disable cut note
+                                    279 
+      0001D8 AF                     280 	xor	a,a ; vol = 0
+      0001D9 EA 12 FF               281 	ld	(#.NR12),a
+      0001DC 3E 80                  282 	ld	a,#0x80 ; start
+      0001DE EA 14 FF               283 	ld	(#.NR14),a
+                                    284 
+      0001E1                        285 ch1_dont_cut$:
+                                    286 
+                                    287 	; Arpeggio
+                                    288 	; --------
+                                    289 
+      0001E1 FA 00 00               290 	ld	a,(gbt_arpeggio_enabled+0)
+      0001E4 A7                     291 	and	a,a
+      0001E5 C8                     292 	ret	z ; a is 0, return 0
+                                    293 
+                                    294 	; If enabled arpeggio, handle it
+                                    295 
+      0001E6 FA 00 00               296 	ld	a,(gbt_arpeggio_tick+0)
+      0001E9 A7                     297 	and	a,a
+      0001EA 20 14                  298 	jr	nz,ch1_not_tick_0$
+                                    299 
+                                    300 	; Tick 0 - Set original frequency
+                                    301 
+      0001EC FA 00 00               302 	ld	a,(gbt_arpeggio_freq_index+0*3+0)
+                                    303 
+      0001EF CD 20 01               304 	call	_gbt_get_freq_from_index
+                                    305 
+      0001F2 79                     306 	ld	a,c
+      0001F3 EA 00 00               307 	ld	(gbt_freq+0*2+0),a
+      0001F6 78                     308 	ld	a,b
+      0001F7 EA 01 00               309 	ld	(gbt_freq+0*2+1),a ; Set frequency
+                                    310 
+      0001FA 3E 01                  311 	ld	a,#1
+      0001FC EA 00 00               312 	ld	(gbt_arpeggio_tick+0),a
+                                    313 
+      0001FF C9                     314 	ret ; ret 1
+                                    315 
+      000200                        316 ch1_not_tick_0$:
+                                    317 
+      000200 FE 01                  318 	cp	a,#1
+      000202 20 15                  319 	jr	nz,ch1_not_tick_1$
+                                    320 
+                                    321 	; Tick 1
+                                    322 
+      000204 FA 01 00               323 	ld	a,(gbt_arpeggio_freq_index+0*3+1)
+                                    324 
+      000207 CD 20 01               325 	call	_gbt_get_freq_from_index
+                                    326 
+      00020A 79                     327 	ld	a,c
+      00020B EA 00 00               328 	ld	(gbt_freq+0*2+0),a
+      00020E 78                     329 	ld	a,b
+      00020F EA 01 00               330 	ld	(gbt_freq+0*2+1),a ; Set frequency
+                                    331 
+      000212 3E 02                  332 	ld	a,#2
+      000214 EA 00 00               333 	ld	(gbt_arpeggio_tick+0),a
+                                    334 
+      000217 3D                     335 	dec	a
+      000218 C9                     336 	ret ; ret 1
+                                    337 
+      000219                        338 ch1_not_tick_1$:
+                                    339 
+                                    340 	; Tick 2
+                                    341 
+      000219 FA 02 00               342 	ld	a,(gbt_arpeggio_freq_index+0*3+2)
+                                    343 
+      00021C CD 20 01               344 	call	_gbt_get_freq_from_index
+                                    345 
+      00021F 79                     346 	ld	a,c
+      000220 EA 00 00               347 	ld	(gbt_freq+0*2+0),a
+      000223 78                     348 	ld	a,b
+      000224 EA 01 00               349 	ld	(gbt_freq+0*2+1),a ; Set frequency
+                                    350 
+      000227 AF                     351 	xor	a,a
+      000228 EA 00 00               352 	ld	(gbt_arpeggio_tick+0),a
+                                    353 
+      00022B 3C                     354 	inc	a
+      00022C C9                     355 	ret ; ret 1
+                                    356 
+                                    357 ; -----------------
+                                    358 
+                                    359 ; returns a = 1 if needed to update registers, 0 if not
+      00022D                        360 gbt_channel_1_set_effect: ; a = effect, de = pointer to data.
+                                    361 
+      00022D 21 3B 02               362 	ld	hl,#gbt_ch1_jump_table$
+      000230 4F                     363 	ld	c,a
+      000231 06 00                  364 	ld	b,#0
+      000233 09                     365 	add	hl,bc
+      000234 09                     366 	add	hl,bc
+                                    367 
+      000235 2A                     368 	ld	a,(hl+)
+      000236 66                     369 	ld	h,(hl)
+      000237 6F                     370 	ld	l,a
+                                    371 
+      000238 1A                     372 	ld	a,(de) ; load args
+      000239 13                     373 	inc	de
+                                    374 
+      00023A E9                     375 	jp	(hl)
+                                    376 
+      00023B                        377 gbt_ch1_jump_table$:
+      00023B 5B 02                  378 	.DW	gbt_ch1_pan$
+      00023D 63 02                  379 	.DW	gbt_ch1_arpeggio$
+      00023F 7E 02                  380 	.DW	gbt_ch1_cut_note$
+      000241 0F 06                  381 	.DW	gbt_ch1234_nop
+      000243 0F 06                  382 	.DW	gbt_ch1234_nop
+      000245 0F 06                  383 	.DW	gbt_ch1234_nop
+      000247 0F 06                  384 	.DW	gbt_ch1234_nop
+      000249 0F 06                  385 	.DW	gbt_ch1234_nop
+      00024B 11 06                  386 	.DW	gbt_ch1234_jump_pattern
+      00024D 22 06                  387 	.DW	gbt_ch1234_jump_position
+      00024F 30 06                  388 	.DW	gbt_ch1234_speed
+      000251 0F 06                  389 	.DW	gbt_ch1234_nop
+      000253 0F 06                  390 	.DW	gbt_ch1234_nop
+      000255 0F 06                  391 	.DW	gbt_ch1234_nop
+      000257 0F 06                  392 	.DW	gbt_ch1234_nop
+      000259 0F 06                  393 	.DW	gbt_ch1234_nop
+                                    394 
+      00025B                        395 gbt_ch1_pan$:
+      00025B E6 11                  396 	and	a,#0x11
+      00025D EA 00 00               397 	ld	(gbt_pan+0),a
+      000260 3E 01                  398 	ld	a,#1
+      000262 C9                     399 	ret ; ret 1
+                                    400 
+      000263                        401 gbt_ch1_arpeggio$:
+      000263 47                     402 	ld	b,a ; b = params
+                                    403 
+      000264 21 00 00               404 	ld	hl,#gbt_arpeggio_freq_index+0*3
+      000267 4E                     405 	ld	c,(hl) ; c = base index
+      000268 23                     406 	inc	hl
+                                    407 
+      000269 78                     408 	ld	a,b
+      00026A CB 37                  409 	swap	a
+      00026C E6 0F                  410 	and	a,#0x0F
+      00026E 81                     411 	add	a,c
+                                    412 
+      00026F 22                     413 	ld	(hl+),a ; save first increment
+                                    414 
+      000270 78                     415 	ld	a,b
+      000271 E6 0F                  416 	and	a,#0x0F
+      000273 81                     417 	add	a,c
+                                    418 
+      000274 77                     419 	ld	(hl),a ; save second increment
+                                    420 
+      000275 3E 01                  421 	ld	a,#1
+      000277 EA 00 00               422 	ld	(gbt_arpeggio_enabled+0),a
+      00027A EA 00 00               423 	ld	(gbt_arpeggio_tick+0),a
+                                    424 
+      00027D C9                     425 	ret ; ret 1
+                                    426 
+      00027E                        427 gbt_ch1_cut_note$:
+      00027E EA 00 00               428 	ld	(gbt_cut_note_tick+0),a
+      000281 AF                     429 	xor	a,a ; ret 0
+      000282 C9                     430 	ret
+                                    431 
+                                    432 ;-------------------------------------------------------------------------------
+                                    433 ;---------------------------------- Channel 2 ----------------------------------
+                                    434 ;-------------------------------------------------------------------------------
+                                    435 
+      000283                        436 gbt_channel_2_handle:: ; de = info
+                                    437 
+      000283 FA 00 00               438 	ld	a,(gbt_channels_enabled)
+      000286 E6 02                  439 	and	a,#0x02
+      000288 20 14                  440 	jr	nz,channel2_enabled$
+                                    441 
+                                    442 	; Channel is disabled. Increment pointer as needed
+                                    443 
+      00028A 1A                     444 	ld	a,(de)
+      00028B 13                     445 	inc	de
+      00028C CB 7F                  446 	bit	7,a
+      00028E 20 06                  447 	jr	nz,ch2_more_bytes$
+      000290 CB 77                  448 	bit	6,a
+      000292 28 09                  449 	jr	z,ch2_no_more_bytes_this_channel$
+                                    450 
+      000294 18 06                  451 	jr	ch2_one_more_byte$
+                                    452 
+      000296                        453 ch2_more_bytes$:
+                                    454 
+      000296 1A                     455 	ld	a,(de)
+      000297 13                     456 	inc	de
+      000298 CB 7F                  457 	bit	7,a
+      00029A 28 01                  458 	jr	z,ch2_no_more_bytes_this_channel$
+                                    459 
+      00029C                        460 ch2_one_more_byte$:
+                                    461 
+      00029C 13                     462 	inc	de
+                                    463 
+      00029D                        464 ch2_no_more_bytes_this_channel$:
+                                    465 
+      00029D C9                     466 	ret
+                                    467 
+      00029E                        468 channel2_enabled$:
+                                    469 
+                                    470 	; Channel 2 is enabled
+                                    471 
+      00029E 1A                     472 	ld	a,(de)
+      00029F 13                     473 	inc	de
+                                    474 
+      0002A0 CB 7F                  475 	bit	7,a
+      0002A2 20 24                  476 	jr	nz,ch2_has_frequency$
+                                    477 
+                                    478 	; Not frequency
+                                    479 
+      0002A4 CB 77                  480 	bit	6,a
+      0002A6 20 0E                  481 	jr	nz,ch2_instr_effects$
+                                    482 
+                                    483 	; Set volume or NOP
+                                    484 
+      0002A8 CB 6F                  485 	bit	5,a
+      0002AA 20 01                  486 	jr	nz,ch2_just_set_volume$
+                                    487 
+                                    488 	; NOP
+                                    489 
+      0002AC C9                     490 	ret
+                                    491 
+      0002AD                        492 ch2_just_set_volume$:
+                                    493 
+                                    494 	; Set volume
+                                    495 
+      0002AD E6 0F                  496 	and	a,#0x0F
+      0002AF CB 37                  497 	swap	a
+      0002B1 EA 01 00               498 	ld	(gbt_vol+1),a
+                                    499 
+      0002B4 18 4C                  500 	jr	refresh_channel2_regs$
+                                    501 
+      0002B6                        502 ch2_instr_effects$:
+                                    503 
+                                    504 	; Set instrument and effect
+                                    505 
+      0002B6 47                     506 	ld	b,a ; save byte
+                                    507 
+      0002B7 E6 30                  508 	and	a,#0x30
+      0002B9 CB 27                  509 	sla	a
+      0002BB CB 27                  510 	sla	a
+      0002BD EA 01 00               511 	ld	(gbt_instr+1),a ; Instrument
+                                    512 
+      0002C0 78                     513 	ld	a,b ; restore byte
+                                    514 
+      0002C1 E6 0F                  515 	and	a,#0x0F ; a = effect
+                                    516 
+      0002C3 CD 80 03               517 	call	gbt_channel_2_set_effect
+                                    518 
+      0002C6 18 3A                  519 	jr	refresh_channel2_regs$
+                                    520 
+      0002C8                        521 ch2_has_frequency$:
+                                    522 
+                                    523 	; Has frequency
+                                    524 
+      0002C8 E6 7F                  525 	and	a,#0x7F
+      0002CA EA 03 00               526 	ld	(gbt_arpeggio_freq_index+1*3),a
+                                    527 	; This destroys hl and a. Returns freq in bc
+      0002CD CD 20 01               528 	call	_gbt_get_freq_from_index
+                                    529 
+      0002D0 79                     530 	ld	a,c
+      0002D1 EA 02 00               531 	ld	(gbt_freq+1*2+0),a
+      0002D4 78                     532 	ld	a,b
+      0002D5 EA 03 00               533 	ld	(gbt_freq+1*2+1),a ; Get frequency
+                                    534 
+      0002D8 1A                     535 	ld	a,(de)
+      0002D9 13                     536 	inc	de
+                                    537 
+      0002DA CB 7F                  538 	bit	7,a
+      0002DC 20 14                  539 	jr	nz,ch2_freq_instr_and_effect$
+                                    540 
+                                    541 	; Freq + Instr + Volume
+                                    542 
+      0002DE 47                     543 	ld	b,a ; save byte
+                                    544 
+      0002DF E6 30                  545 	and	a,#0x30
+      0002E1 CB 27                  546 	sla	a
+      0002E3 CB 27                  547 	sla	a
+      0002E5 EA 01 00               548 	ld	(gbt_instr+1),a ; Instrument
+                                    549 
+      0002E8 78                     550 	ld	a,b ; restore byte
+                                    551 
+      0002E9 E6 0F                  552 	and	a,#0x0F ; a = volume
+                                    553 
+      0002EB CB 37                  554 	swap	a
+      0002ED EA 01 00               555 	ld	(gbt_vol+1),a
+                                    556 
+      0002F0 18 10                  557 	jr	refresh_channel2_regs$
+                                    558 
+      0002F2                        559 ch2_freq_instr_and_effect$:
+                                    560 
+                                    561 	; Freq + Instr + Effect
+                                    562 
+      0002F2 47                     563 	ld	b,a ; save byte
+                                    564 
+      0002F3 E6 30                  565 	and	a,#0x30
+      0002F5 CB 27                  566 	sla	a
+      0002F7 CB 27                  567 	sla	a
+      0002F9 EA 01 00               568 	ld	(gbt_instr+1),a ; Instrument
+                                    569 
+      0002FC 78                     570 	ld	a,b ; restore byte
+                                    571 
+      0002FD E6 0F                  572 	and	a,#0x0F ; a = effect
+                                    573 
+      0002FF CD 80 03               574 	call	gbt_channel_2_set_effect
+                                    575 
+                                    576 	;jr	.refresh_channel2_regs
+                                    577 
+      000302                        578 refresh_channel2_regs$:
+                                    579 
+                                    580 	; fall through!
+                                    581 
+                                    582 ; -----------------
+                                    583 
+      000302                        584 channel2_refresh_registers:
+                                    585 
+      000302 FA 01 00               586 	ld	a,(gbt_instr+1)
+      000305 EA 16 FF               587 	ld	(#.NR21),a
+      000308 FA 01 00               588 	ld	a,(gbt_vol+1)
+      00030B EA 17 FF               589 	ld	(#.NR22),a
+      00030E FA 02 00               590 	ld	a,(gbt_freq+1*2+0)
+      000311 EA 18 FF               591 	ld	(#.NR23),a
+      000314 FA 03 00               592 	ld	a,(gbt_freq+1*2+1)
+      000317 F6 80                  593 	or	a,#0x80 ; start
+      000319 EA 19 FF               594 	ld	(#.NR24),a
+                                    595 
+      00031C C9                     596 	ret
+                                    597 
+                                    598 ; ------------------
+                                    599 
+      00031D                        600 channel2_update_effects: ; returns 1 in a if it is needed to update sound regs
+                                    601 
+                                    602 	; Cut note
+                                    603 	; --------
+                                    604 
+      00031D FA 01 00               605 	ld	a,(gbt_cut_note_tick+1)
+      000320 21 00 00               606 	ld	hl,#gbt_ticks_elapsed
+      000323 BE                     607 	cp	a,(hl)
+      000324 C2 34 03               608 	jp	nz,ch2_dont_cut$
+                                    609 
+      000327 3D                     610 	dec	a ; a = 0xFF
+      000328 EA 01 00               611 	ld	(gbt_cut_note_tick+1),a ; disable cut note
+                                    612 
+      00032B AF                     613 	xor	a,a ; vol = 0
+      00032C EA 17 FF               614 	ld	(#.NR22),a
+      00032F 3E 80                  615 	ld	a,#0x80 ; start
+      000331 EA 19 FF               616 	ld	(#.NR24),a
+                                    617 
+      000334                        618 ch2_dont_cut$:
+                                    619 
+                                    620 	; Arpeggio
+                                    621 	; --------
+                                    622 
+      000334 FA 01 00               623 	ld	a,(gbt_arpeggio_enabled+1)
+      000337 A7                     624 	and	a,a
+      000338 C8                     625 	ret	z ; a is 0, return 0
+                                    626 
+                                    627 	; If enabled arpeggio, handle it
+                                    628 
+      000339 FA 01 00               629 	ld	a,(gbt_arpeggio_tick+1)
+      00033C A7                     630 	and	a,a
+      00033D 20 14                  631 	jr	nz,ch2_not_tick_0$
+                                    632 
+                                    633 	; Tick 0 - Set original frequency
+                                    634 
+      00033F FA 03 00               635 	ld	a,(gbt_arpeggio_freq_index+1*3+0)
+                                    636 
+      000342 CD 20 01               637 	call	_gbt_get_freq_from_index
+                                    638 
+      000345 79                     639 	ld	a,c
+      000346 EA 02 00               640 	ld	(gbt_freq+1*2+0),a
+      000349 78                     641 	ld	a,b
+      00034A EA 03 00               642 	ld	(gbt_freq+1*2+1),a ; Set frequency
+                                    643 
+      00034D 3E 01                  644 	ld	a,#1
+      00034F EA 01 00               645 	ld	(gbt_arpeggio_tick+1),a
+                                    646 
+      000352 C9                     647 	ret ; ret 1
+                                    648 
+      000353                        649 ch2_not_tick_0$:
+                                    650 
+      000353 FE 01                  651 	cp	a,#1
+      000355 20 15                  652 	jr	nz,ch2_not_tick_1$
+                                    653 
+                                    654 	; Tick 1
+                                    655 
+      000357 FA 04 00               656 	ld	a,(gbt_arpeggio_freq_index+1*3+1)
+                                    657 
+      00035A CD 20 01               658 	call	_gbt_get_freq_from_index
+                                    659 
+      00035D 79                     660 	ld	a,c
+      00035E EA 02 00               661 	ld	(gbt_freq+1*2+0),a
+      000361 78                     662 	ld	a,b
+      000362 EA 03 00               663 	ld	(gbt_freq+1*2+1),a ; Set frequency
+                                    664 
+      000365 3E 02                  665 	ld	a,#2
+      000367 EA 01 00               666 	ld	(gbt_arpeggio_tick+1),a
+                                    667 
+      00036A 3D                     668 	dec	a
+      00036B C9                     669 	ret ; ret 1
+                                    670 
+      00036C                        671 ch2_not_tick_1$:
+                                    672 
+                                    673 	; Tick 2
+                                    674 
+      00036C FA 05 00               675 	ld	a,(gbt_arpeggio_freq_index+1*3+2)
+                                    676 
+      00036F CD 20 01               677 	call	_gbt_get_freq_from_index
+                                    678 
+      000372 79                     679 	ld	a,c
+      000373 EA 02 00               680 	ld	(gbt_freq+1*2+0),a
+      000376 78                     681 	ld	a,b
+      000377 EA 03 00               682 	ld	(gbt_freq+1*2+1),a ; Set frequency
+                                    683 
+      00037A AF                     684 	xor	a,a
+      00037B EA 01 00               685 	ld	(gbt_arpeggio_tick+1),a
+                                    686 
+      00037E 3C                     687 	inc	a
+      00037F C9                     688 	ret ; ret 1
+                                    689 
+                                    690 ; -----------------
+                                    691 
+                                    692 ; returns a = 1 if needed to update registers, 0 if not
+      000380                        693 gbt_channel_2_set_effect: ; a = effect, de = pointer to data
+                                    694 
+      000380 21 8E 03               695 	ld	hl,#gbt_ch2_jump_table$
+      000383 4F                     696 	ld	c,a
+      000384 06 00                  697 	ld	b,#0
+      000386 09                     698 	add	hl,bc
+      000387 09                     699 	add	hl,bc
+                                    700 
+      000388 2A                     701 	ld	a,(hl+)
+      000389 66                     702 	ld	h,(hl)
+      00038A 6F                     703 	ld	l,a
+                                    704 
+      00038B 1A                     705 	ld	a,(de) ; load args
+      00038C 13                     706 	inc	de
+                                    707 
+      00038D E9                     708 	jp	(hl)
+                                    709 
+      00038E                        710 gbt_ch2_jump_table$:
+      00038E AE 03                  711 	.DW	gbt_ch2_pan$
+      000390 B6 03                  712 	.DW	gbt_ch2_arpeggio$
+      000392 D1 03                  713 	.DW	gbt_ch2_cut_note$
+      000394 0F 06                  714 	.DW	gbt_ch1234_nop
+      000396 0F 06                  715 	.DW	gbt_ch1234_nop
+      000398 0F 06                  716 	.DW	gbt_ch1234_nop
+      00039A 0F 06                  717 	.DW	gbt_ch1234_nop
+      00039C 0F 06                  718 	.DW	gbt_ch1234_nop
+      00039E 11 06                  719 	.DW	gbt_ch1234_jump_pattern
+      0003A0 22 06                  720 	.DW	gbt_ch1234_jump_position
+      0003A2 30 06                  721 	.DW	gbt_ch1234_speed
+      0003A4 0F 06                  722 	.DW	gbt_ch1234_nop
+      0003A6 0F 06                  723 	.DW	gbt_ch1234_nop
+      0003A8 0F 06                  724 	.DW	gbt_ch1234_nop
+      0003AA 0F 06                  725 	.DW	gbt_ch1234_nop
+      0003AC 0F 06                  726 	.DW	gbt_ch1234_nop
+                                    727 
+      0003AE                        728 gbt_ch2_pan$:
+      0003AE E6 22                  729 	and	a,#0x22
+      0003B0 EA 01 00               730 	ld	(gbt_pan+1),a
+      0003B3 3E 01                  731 	ld	a,#1
+      0003B5 C9                     732 	ret ; ret 1
+                                    733 
+      0003B6                        734 gbt_ch2_arpeggio$:
+      0003B6 47                     735 	ld	b,a ; b = params
+                                    736 
+      0003B7 21 03 00               737 	ld	hl,#gbt_arpeggio_freq_index+1*3
+      0003BA 4E                     738 	ld	c,(hl) ; c = base index
+      0003BB 23                     739 	inc	hl
+                                    740 
+      0003BC 78                     741 	ld	a,b
+      0003BD CB 37                  742 	swap	a
+      0003BF E6 0F                  743 	and	a,#0x0F
+      0003C1 81                     744 	add	a,c
+                                    745 
+      0003C2 22                     746 	ld	(hl+),a ; save first increment
+                                    747 
+      0003C3 78                     748 	ld	a,b
+      0003C4 E6 0F                  749 	and	a,#0x0F
+      0003C6 81                     750 	add	a,c
+                                    751 
+      0003C7 77                     752 	ld	(hl),a ; save second increment
+                                    753 
+      0003C8 3E 01                  754 	ld	a,#1
+      0003CA EA 01 00               755 	ld	(gbt_arpeggio_enabled+1),a
+      0003CD EA 01 00               756 	ld	(gbt_arpeggio_tick+1),a
+                                    757 
+      0003D0 C9                     758 	ret ; ret 1
+                                    759 
+      0003D1                        760 gbt_ch2_cut_note$:
+      0003D1 EA 01 00               761 	ld	(gbt_cut_note_tick+1),a
+      0003D4 AF                     762 	xor	a,a ; ret 0
+      0003D5 C9                     763 	ret
+                                    764 
+                                    765 ;-------------------------------------------------------------------------------
+                                    766 ;---------------------------------- Channel 3 ----------------------------------
+                                    767 ;-------------------------------------------------------------------------------
+                                    768 
+      0003D6                        769 gbt_channel_3_handle:: ; de = info
+                                    770 
+      0003D6 FA 00 00               771 	ld	a,(gbt_channels_enabled)
+      0003D9 E6 04                  772 	and	a,#0x04
+      0003DB 20 14                  773 	jr	nz,channel3_enabled$
+                                    774 
+                                    775 	; Channel is disabled. Increment pointer as needed
+                                    776 
+      0003DD 1A                     777 	ld	a,(de)
+      0003DE 13                     778 	inc	de
+      0003DF CB 7F                  779 	bit	7,a
+      0003E1 20 06                  780 	jr	nz,ch3_more_bytes$
+      0003E3 CB 77                  781 	bit	6,a
+      0003E5 28 09                  782 	jr	z,ch3_no_more_bytes_this_channel$
+                                    783 
+      0003E7 18 06                  784 	jr	ch3_one_more_byte$
+                                    785 
+      0003E9                        786 ch3_more_bytes$:
+                                    787 
+      0003E9 1A                     788 	ld	a,(de)
+      0003EA 13                     789 	inc	de
+      0003EB CB 7F                  790 	bit	7,a
+      0003ED 28 01                  791 	jr	z,ch3_no_more_bytes_this_channel$
+                                    792 
+      0003EF                        793 ch3_one_more_byte$:
+                                    794 
+      0003EF 13                     795 	inc	de
+                                    796 
+      0003F0                        797 ch3_no_more_bytes_this_channel$:
+                                    798 
+      0003F0 C9                     799 	ret
+                                    800 
+      0003F1                        801 channel3_enabled$:
+                                    802 
+                                    803 	; Channel 3 is enabled
+                                    804 
+      0003F1 1A                     805 	ld	a,(de)
+      0003F2 13                     806 	inc	de
+                                    807 
+      0003F3 CB 7F                  808 	bit	7,a
+      0003F5 20 1B                  809 	jr	nz,ch3_has_frequency$
+                                    810 
+                                    811 	; Not frequency
+                                    812 
+      0003F7 CB 77                  813 	bit	6,a
+      0003F9 20 0E                  814 	jr	nz,ch3_effects$
+                                    815 
+                                    816 	; Set volume or NOP
+                                    817 
+      0003FB CB 6F                  818 	bit	5,a
+      0003FD 20 01                  819 	jr	nz,ch3_just_set_volume$
+                                    820 
+                                    821 	; NOP
+                                    822 
+      0003FF C9                     823 	ret
+                                    824 
+      000400                        825 ch3_just_set_volume$:
+                                    826 
+                                    827 	; Set volume
+                                    828 
+      000400 E6 0F                  829 	and	a,#0x0F
+      000402 CB 37                  830 	swap	a
+      000404 EA 02 00               831 	ld	(gbt_vol+2),a
+                                    832 
+      000407 18 3D                  833 	jr	refresh_channel3_regs$
+                                    834 
+      000409                        835 ch3_effects$:
+                                    836 
+                                    837 	; Set effect
+                                    838 
+      000409 E6 0F                  839 	and	a,#0x0F ; a = effect
+                                    840 
+      00040B CD F2 04               841 	call	gbt_channel_3_set_effect
+      00040E A7                     842 	and	a,a
+      00040F C8                     843 	ret	z ; if 0, don't refresh registers
+                                    844 
+      000410 18 34                  845 	jr	refresh_channel3_regs$
+                                    846 
+      000412                        847 ch3_has_frequency$:
+                                    848 
+                                    849 	; Has frequency
+                                    850 
+      000412 E6 7F                  851 	and	a,#0x7F
+      000414 EA 06 00               852 	ld	(gbt_arpeggio_freq_index+2*3),a
+                                    853 	; This destroys hl and a. Returns freq in bc
+      000417 CD 20 01               854 	call	_gbt_get_freq_from_index
+                                    855 
+      00041A 79                     856 	ld	a,c
+      00041B EA 04 00               857 	ld	(gbt_freq+2*2+0),a
+      00041E 78                     858 	ld	a,b
+      00041F EA 05 00               859 	ld	(gbt_freq+2*2+1),a ; Get frequency
+                                    860 
+      000422 1A                     861 	ld	a,(de)
+      000423 13                     862 	inc	de
+                                    863 
+      000424 CB 7F                  864 	bit	7,a
+      000426 20 10                  865 	jr	nz,ch3_freq_instr_and_effect$
+                                    866 
+                                    867 	; Freq + Instr + Volume
+                                    868 
+      000428 47                     869 	ld	b,a ; save byte
+                                    870 
+      000429 E6 0F                  871 	and	a,#0x0F
+      00042B EA 02 00               872 	ld	(gbt_instr+2),a ; Instrument
+                                    873 
+      00042E 78                     874 	ld	a,b ; restore byte
+                                    875 
+      00042F E6 30                  876 	and	a,#0x30 ; a = volume
+      000431 CB 27                  877 	sla	a
+      000433 EA 02 00               878 	ld	(gbt_vol+2),a
+                                    879 
+      000436 18 0E                  880 	jr	refresh_channel3_regs$
+                                    881 
+      000438                        882 ch3_freq_instr_and_effect$:
+                                    883 
+                                    884 	; Freq + Instr + Effect
+                                    885 
+      000438 47                     886 	ld	b,a ; save byte
+                                    887 
+      000439 E6 0F                  888 	and	a,#0x0F
+      00043B EA 02 00               889 	ld	(gbt_instr+2),a ; Instrument
+                                    890 
+      00043E 78                     891 	ld	a,b ; restore byte
+                                    892 
+      00043F E6 70                  893 	and	a,#0x70
+      000441 CB 37                  894 	swap	a	; a = effect (only 0-7 allowed here)
+                                    895 
+      000443 CD F2 04               896 	call	gbt_channel_3_set_effect
+                                    897 
+                                    898 	;jr	.refresh_channel3_regs
+                                    899 
+      000446                        900 refresh_channel3_regs$:
+                                    901 
+                                    902 	; fall through!
+                                    903 
+                                    904 ; -----------------
+                                    905 
+      000446                        906 channel3_refresh_registers:
+                                    907 
+      000446 AF                     908 	xor	a,a
+      000447 EA 1A FF               909 	ld	(#.NR30),a ; disable
+                                    910 
+      00044A FA 00 00               911 	ld	a,(gbt_channel3_loaded_instrument)
+      00044D 47                     912 	ld	b,a
+      00044E FA 02 00               913 	ld	a,(gbt_instr+2)
+      000451 B8                     914 	cp	a,b
+      000452 C4 73 04               915 	call	nz,gbt_channel3_load_instrument ; a = instrument
+                                    916 
+      000455 3E 80                  917 	ld	a,#0x80
+      000457 EA 1A FF               918 	ld	(#.NR30),a ; enable
+                                    919 
+      00045A AF                     920 	xor	a,a
+      00045B EA 1B FF               921 	ld	(#.NR31),a
+      00045E FA 02 00               922 	ld	a,(gbt_vol+2)
+      000461 EA 1C FF               923 	ld	(#.NR32),a
+      000464 FA 04 00               924 	ld	a,(gbt_freq+2*2+0)
+      000467 EA 1D FF               925 	ld	(#.NR33),a
+      00046A FA 05 00               926 	ld	a,(gbt_freq+2*2+1)
+      00046D F6 80                  927 	or	a,#0x80 ; start
+      00046F EA 1E FF               928 	ld	(#.NR34),a
+                                    929 
+      000472 C9                     930 	ret
+                                    931 
+                                    932 ; ------------------
+                                    933 
+      000473                        934 gbt_channel3_load_instrument:
+                                    935 
+      000473 EA 00 00               936 	ld	(gbt_channel3_loaded_instrument),a
+                                    937 
+      000476 CB 37                  938 	swap	a ; a = a * 16
+      000478 4F                     939 	ld	c,a
+      000479 06 00                  940 	ld	b,#0
+      00047B 21 00 00               941 	ld	hl,#gbt_wave
+      00047E 09                     942 	add	hl,bc
+                                    943 
+      00047F 0E 30                  944 	ld	c,#0x30
+      000481 06 10                  945 	ld	b,#16
+      000483                        946 ch3_loop$:
+      000483 2A                     947 	ld	a,(hl+)
+      000484 E2                     948 	ldh	(c),a
+      000485 0C                     949 	inc	c
+      000486 05                     950 	dec	b
+      000487 20 FA                  951 	jr	nz,ch3_loop$
+                                    952 
+      000489 C9                     953 	ret
+                                    954 
+                                    955 ; ------------------
+                                    956 
+      00048A                        957 channel3_update_effects: ; returns 1 in a if it is needed to update sound regs
+                                    958 
+                                    959 	; Cut note
+                                    960 	; --------
+                                    961 
+      00048A FA 02 00               962 	ld	a,(gbt_cut_note_tick+2)
+      00048D 21 00 00               963 	ld	hl,#gbt_ticks_elapsed
+      000490 BE                     964 	cp	a,(hl)
+      000491 C2 A6 04               965 	jp	nz,ch3_dont_cut$
+                                    966 
+      000494 3D                     967 	dec	a ; a = 0xFF
+      000495 EA 02 00               968 	ld	(gbt_cut_note_tick+2),a ; disable cut note
+                                    969 
+      000498 3E 80                  970 	ld	a,#0x80
+      00049A EA 1A FF               971 	ld	(#.NR30),a ; enable
+                                    972 
+      00049D AF                     973 	xor	a,a ; vol = 0
+      00049E EA 1C FF               974 	ld	(#.NR32),a
+      0004A1 3E 80                  975 	ld	a,#0x80 ; start
+      0004A3 EA 1E FF               976 	ld	(#.NR34),a
+                                    977 
+      0004A6                        978 ch3_dont_cut$:
+                                    979 
+                                    980 	; Arpeggio
+                                    981 	; --------
+                                    982 
+      0004A6 FA 02 00               983 	ld	a,(gbt_arpeggio_enabled+2)
+      0004A9 A7                     984 	and	a,a
+      0004AA C8                     985 	ret	z ; a is 0, return 0
+                                    986 
+                                    987 	; If enabled arpeggio, handle it
+                                    988 
+      0004AB FA 02 00               989 	ld	a,(gbt_arpeggio_tick+2)
+      0004AE A7                     990 	and	a,a
+      0004AF 20 14                  991 	jr	nz,ch3_not_tick_0$
+                                    992 
+                                    993 	; Tick 0 - Set original frequency
+                                    994 
+      0004B1 FA 06 00               995 	ld	a,(gbt_arpeggio_freq_index+2*3+0)
+                                    996 
+      0004B4 CD 20 01               997 	call	_gbt_get_freq_from_index
+                                    998 
+      0004B7 79                     999 	ld	a,c
+      0004B8 EA 04 00              1000 	ld	(gbt_freq+2*2+0),a
+      0004BB 78                    1001 	ld	a,b
+      0004BC EA 05 00              1002 	ld	(gbt_freq+2*2+1),a ; Set frequency
+                                   1003 
+      0004BF 3E 01                 1004 	ld	a,#1
+      0004C1 EA 02 00              1005 	ld	(gbt_arpeggio_tick+2),a
+                                   1006 
+      0004C4 C9                    1007 	ret ; ret 1
+                                   1008 
+      0004C5                       1009 ch3_not_tick_0$:
+                                   1010 
+      0004C5 FE 01                 1011 	cp	a,#1
+      0004C7 20 15                 1012 	jr	nz,ch3_not_tick_1$
+                                   1013 
+                                   1014 	; Tick 1
+                                   1015 
+      0004C9 FA 07 00              1016 	ld	a,(gbt_arpeggio_freq_index+2*3+1)
+                                   1017 
+      0004CC CD 20 01              1018 	call	_gbt_get_freq_from_index
+                                   1019 
+      0004CF 79                    1020 	ld	a,c
+      0004D0 EA 04 00              1021 	ld	(gbt_freq+2*2+0),a
+      0004D3 78                    1022 	ld	a,b
+      0004D4 EA 05 00              1023 	ld	(gbt_freq+2*2+1),a ; Set frequency
+                                   1024 
+      0004D7 3E 02                 1025 	ld	a,#2
+      0004D9 EA 02 00              1026 	ld	(gbt_arpeggio_tick+2),a
+                                   1027 
+      0004DC 3D                    1028 	dec	a
+      0004DD C9                    1029 	ret ; ret 1
+                                   1030 
+      0004DE                       1031 ch3_not_tick_1$:
+                                   1032 
+                                   1033 	; Tick 2
+                                   1034 
+      0004DE FA 08 00              1035 	ld	a,(gbt_arpeggio_freq_index+2*3+2)
+                                   1036 
+      0004E1 CD 20 01              1037 	call	_gbt_get_freq_from_index
+                                   1038 
+      0004E4 79                    1039 	ld	a,c
+      0004E5 EA 04 00              1040 	ld	(gbt_freq+2*2+0),a
+      0004E8 78                    1041 	ld	a,b
+      0004E9 EA 05 00              1042 	ld	(gbt_freq+2*2+1),a ; Set frequency
+                                   1043 
+      0004EC AF                    1044 	xor	a,a
+      0004ED EA 02 00              1045 	ld	(gbt_arpeggio_tick+2),a
+                                   1046 
+      0004F0 3C                    1047 	inc	a
+      0004F1 C9                    1048 	ret ; ret 1
+                                   1049 
+                                   1050 ; -----------------
+                                   1051 
+                                   1052 ; returns a = 1 if needed to update registers, 0 if not
+      0004F2                       1053 gbt_channel_3_set_effect: ; a = effect, de = pointer to data
+                                   1054 
+      0004F2 21 00 05              1055 	ld	hl,#gbt_ch3_jump_table$
+      0004F5 4F                    1056 	ld	c,a
+      0004F6 06 00                 1057 	ld	b,#0
+      0004F8 09                    1058 	add	hl,bc
+      0004F9 09                    1059 	add	hl,bc
+                                   1060 
+      0004FA 2A                    1061 	ld	a,(hl+)
+      0004FB 66                    1062 	ld	h,(hl)
+      0004FC 6F                    1063 	ld	l,a
+                                   1064 
+      0004FD 1A                    1065 	ld	a,(de) ; load args
+      0004FE 13                    1066 	inc	de
+                                   1067 
+      0004FF E9                    1068 	jp	(hl)
+                                   1069 
+      000500                       1070 gbt_ch3_jump_table$:
+      000500 20 05                 1071 	.DW	gbt_ch3_pan$
+      000502 28 05                 1072 	.DW	gbt_ch3_arpeggio$
+      000504 43 05                 1073 	.DW	gbt_ch3_cut_note$
+      000506 0F 06                 1074 	.DW	gbt_ch1234_nop
+      000508 0F 06                 1075 	.DW	gbt_ch1234_nop
+      00050A 0F 06                 1076 	.DW	gbt_ch1234_nop
+      00050C 0F 06                 1077 	.DW	gbt_ch1234_nop
+      00050E 0F 06                 1078 	.DW	gbt_ch1234_nop
+      000510 11 06                 1079 	.DW	gbt_ch1234_jump_pattern
+      000512 22 06                 1080 	.DW	gbt_ch1234_jump_position
+      000514 30 06                 1081 	.DW	gbt_ch1234_speed
+      000516 0F 06                 1082 	.DW	gbt_ch1234_nop
+      000518 0F 06                 1083 	.DW	gbt_ch1234_nop
+      00051A 0F 06                 1084 	.DW	gbt_ch1234_nop
+      00051C 0F 06                 1085 	.DW	gbt_ch1234_nop
+      00051E 0F 06                 1086 	.DW	gbt_ch1234_nop
+                                   1087 
+      000520                       1088 gbt_ch3_pan$:
+      000520 E6 44                 1089 	and	a,#0x44
+      000522 EA 02 00              1090 	ld	(gbt_pan+2),a
+      000525 3E 01                 1091 	ld	a,#1
+      000527 C9                    1092 	ret ; ret 1
+                                   1093 
+      000528                       1094 gbt_ch3_arpeggio$:
+      000528 47                    1095 	ld	b,a ; b = params
+                                   1096 
+      000529 21 06 00              1097 	ld	hl,#gbt_arpeggio_freq_index+2*3
+      00052C 4E                    1098 	ld	c,(hl) ; c = base index
+      00052D 23                    1099 	inc	hl
+                                   1100 
+      00052E 78                    1101 	ld	a,b
+      00052F CB 37                 1102 	swap	a
+      000531 E6 0F                 1103 	and	a,#0x0F
+      000533 81                    1104 	add	a,c
+                                   1105 
+      000534 22                    1106 	ld	(hl+),a ; save first increment
+                                   1107 
+      000535 78                    1108 	ld	a,b
+      000536 E6 0F                 1109 	and	a,#0x0F
+      000538 81                    1110 	add	a,c
+                                   1111 
+      000539 77                    1112 	ld	(hl),a ; save second increment
+                                   1113 
+      00053A 3E 01                 1114 	ld	a,#1
+      00053C EA 02 00              1115 	ld	(gbt_arpeggio_enabled+2),a
+      00053F EA 02 00              1116 	ld	(gbt_arpeggio_tick+2),a
+                                   1117 
+      000542 C9                    1118 	ret ; ret 1
+                                   1119 
+      000543                       1120 gbt_ch3_cut_note$:
+      000543 EA 02 00              1121 	ld	(gbt_cut_note_tick+2),a
+      000546 AF                    1122 	xor	a,a ; ret 0
+      000547 C9                    1123 	ret
+                                   1124 
+                                   1125 ;-------------------------------------------------------------------------------
+                                   1126 ;---------------------------------- Channel 4 ----------------------------------
+                                   1127 ;-------------------------------------------------------------------------------
+                                   1128 
+      000548                       1129 gbt_channel_4_handle:: ; de = info
+                                   1130 
+      000548 FA 00 00              1131 	ld	a,(gbt_channels_enabled)
+      00054B E6 08                 1132 	and	a,#0x08
+      00054D 20 14                 1133 	jr	nz,channel4_enabled$
+                                   1134 
+                                   1135 	; Channel is disabled. Increment pointer as needed
+                                   1136 
+      00054F 1A                    1137 	ld	a,(de)
+      000550 13                    1138 	inc	de
+      000551 CB 7F                 1139 	bit	7,a
+      000553 20 06                 1140 	jr	nz,ch4_more_bytes$
+      000555 CB 77                 1141 	bit	6,a
+      000557 28 09                 1142 	jr	z,ch4_no_more_bytes_this_channel$
+                                   1143 
+      000559 18 06                 1144 	jr	ch4_one_more_byte$
+                                   1145 
+      00055B                       1146 ch4_more_bytes$:
+                                   1147 
+      00055B 1A                    1148 	ld	a,(de)
+      00055C 13                    1149 	inc	de
+      00055D CB 7F                 1150 	bit	7,a
+      00055F 28 01                 1151 	jr	z,ch4_no_more_bytes_this_channel$
+                                   1152 
+      000561                       1153 ch4_one_more_byte$:
+                                   1154 
+      000561 13                    1155 	inc	de
+                                   1156 
+      000562                       1157 ch4_no_more_bytes_this_channel$:
+                                   1158 
+      000562 C9                    1159 	ret
+                                   1160 
+      000563                       1161 channel4_enabled$:
+                                   1162 
+                                   1163 	; Channel 4 is enabled
+                                   1164 
+      000563 1A                    1165 	ld	a,(de)
+      000564 13                    1166 	inc	de
+                                   1167 
+      000565 CB 7F                 1168 	bit	7,a
+      000567 20 1B                 1169 	jr	nz,ch4_has_instrument$
+                                   1170 
+                                   1171 	; Not instrument
+                                   1172 
+      000569 CB 77                 1173 	bit	6,a
+      00056B 20 0E                 1174 	jr	nz,ch4_effects$
+                                   1175 
+                                   1176 	; Set volume or NOP
+                                   1177 
+      00056D CB 6F                 1178 	bit	5,a
+      00056F 20 01                 1179 	jr	nz,ch4_just_set_volume$
+                                   1180 
+                                   1181 	; NOP
+                                   1182 
+      000571 C9                    1183 	ret
+                                   1184 
+      000572                       1185 ch4_just_set_volume$:
+                                   1186 
+                                   1187 	; Set volume
+                                   1188 
+      000572 E6 0F                 1189 	and	a,#0x0F
+      000574 CB 37                 1190 	swap	a
+      000576 EA 03 00              1191 	ld	(gbt_vol+3),a
+                                   1192 
+      000579 18 2A                 1193 	jr	refresh_channel4_regs$
+                                   1194 
+      00057B                       1195 ch4_effects$:
+                                   1196 
+                                   1197 	; Set effect
+                                   1198 
+      00057B E6 0F                 1199 	and	a,#0x0F ; a = effect
+                                   1200 
+      00057D CD D4 05              1201 	call	gbt_channel_4_set_effect
+      000580 A7                    1202 	and	a,a
+      000581 C8                    1203 	ret	z ; if 0, don't refresh registers
+                                   1204 
+      000582 18 21                 1205 	jr	refresh_channel4_regs$
+                                   1206 
+      000584                       1207 ch4_has_instrument$:
+                                   1208 
+                                   1209 	; Has instrument
+                                   1210 
+      000584 E6 1F                 1211 	and	a,#0x1F
+      000586 21 80 00              1212 	ld	hl,#gbt_noise
+      000589 4F                    1213 	ld	c,a
+      00058A 06 00                 1214 	ld	b,#0
+      00058C 09                    1215 	add	hl,bc
+      00058D 7E                    1216 	ld	a,(hl) ; a = instrument data
+                                   1217 
+      00058E EA 03 00              1218 	ld	(gbt_instr+3),a
+                                   1219 
+      000591 1A                    1220 	ld	a,(de)
+      000592 13                    1221 	inc	de
+                                   1222 
+      000593 CB 7F                 1223 	bit	7,a
+      000595 20 09                 1224 	jr	nz,ch4_instr_and_effect$
+                                   1225 
+                                   1226 	; Instr + Volume
+                                   1227 
+      000597 E6 0F                 1228 	and	a,#0x0F ; a = volume
+                                   1229 
+      000599 CB 37                 1230 	swap	a
+      00059B EA 03 00              1231 	ld	(gbt_vol+3),a
+                                   1232 
+      00059E 18 05                 1233 	jr	refresh_channel4_regs$
+                                   1234 
+      0005A0                       1235 ch4_instr_and_effect$:
+                                   1236 
+                                   1237 	; Instr + Effect
+                                   1238 
+      0005A0 E6 0F                 1239 	and	a,#0x0F ; a = effect
+                                   1240 
+      0005A2 CD D4 05              1241 	call	gbt_channel_4_set_effect
+                                   1242 
+                                   1243 	;jr	ch4_refresh_channel4_regs$
+                                   1244 
+      0005A5                       1245 refresh_channel4_regs$:
+                                   1246 
+                                   1247 	; fall through!
+                                   1248 
+                                   1249 ; -----------------
+                                   1250 
+      0005A5                       1251 channel4_refresh_registers:
+                                   1252 
+      0005A5 AF                    1253 	xor	a,a
+      0005A6 EA 20 FF              1254 	ld	(#.NR41),a
+      0005A9 FA 03 00              1255 	ld	a,(gbt_vol+3)
+      0005AC EA 21 FF              1256 	ld	(#.NR42),a
+      0005AF FA 03 00              1257 	ld	a,(gbt_instr+3)
+      0005B2 EA 22 FF              1258 	ld	(#.NR43),a
+      0005B5 3E 80                 1259 	ld	a,#0x80 ; start
+      0005B7 EA 23 FF              1260 	ld	(#.NR44),a
+                                   1261 
+      0005BA C9                    1262 	ret
+                                   1263 
+                                   1264 ; ------------------
+                                   1265 
+      0005BB                       1266 channel4_update_effects: ; returns 1 in a if it is needed to update sound regs
+                                   1267 
+                                   1268 	; Cut note
+                                   1269 	; --------
+                                   1270 
+      0005BB FA 03 00              1271 	ld	a,(gbt_cut_note_tick+3)
+      0005BE 21 00 00              1272 	ld	hl,#gbt_ticks_elapsed
+      0005C1 BE                    1273 	cp	a,(hl)
+      0005C2 C2 D2 05              1274 	jp	nz,ch4_dont_cut$
+                                   1275 
+      0005C5 3D                    1276 	dec	a ; a = 0xFF
+      0005C6 EA 03 00              1277 	ld	(gbt_cut_note_tick+3),a ; disable cut note
+                                   1278 
+      0005C9 AF                    1279 	xor	a,a ; vol = 0
+      0005CA EA 21 FF              1280 	ld	(#.NR42),a
+      0005CD 3E 80                 1281 	ld	a,#0x80 ; start
+      0005CF EA 23 FF              1282 	ld	(#.NR44),a
+                                   1283 
+      0005D2                       1284 ch4_dont_cut$:
+                                   1285 
+      0005D2 AF                    1286 	xor	a,a
+      0005D3 C9                    1287 	ret ; a is 0, return
+                                   1288 
+                                   1289 ; -----------------
+                                   1290 
+                                   1291 ; returns a = 1 if needed to update registers, 0 if not
+      0005D4                       1292 gbt_channel_4_set_effect: ; a = effect, de = pointer to data
+                                   1293 
+      0005D4 21 E2 05              1294 	ld	hl,#gbt_ch4_jump_table$
+      0005D7 4F                    1295 	ld	c,a
+      0005D8 06 00                 1296 	ld	b,#0
+      0005DA 09                    1297 	add	hl,bc
+      0005DB 09                    1298 	add	hl,bc
+                                   1299 
+      0005DC 2A                    1300 	ld	a,(hl+)
+      0005DD 66                    1301 	ld	h,(hl)
+      0005DE 6F                    1302 	ld	l,a
+                                   1303 
+      0005DF 1A                    1304 	ld	a,(de) ; load args
+      0005E0 13                    1305 	inc	de
+                                   1306 
+      0005E1 E9                    1307 	jp	(hl)
+                                   1308 
+      0005E2                       1309 gbt_ch4_jump_table$:
+      0005E2 02 06                 1310 	.DW	gbt_ch4_pan$
+      0005E4 0F 06                 1311 	.DW	gbt_ch1234_nop ; gbt_ch4_arpeggio
+      0005E6 0A 06                 1312 	.DW	gbt_ch4_cut_note$
+      0005E8 0F 06                 1313 	.DW	gbt_ch1234_nop
+      0005EA 0F 06                 1314 	.DW	gbt_ch1234_nop
+      0005EC 0F 06                 1315 	.DW	gbt_ch1234_nop
+      0005EE 0F 06                 1316 	.DW	gbt_ch1234_nop
+      0005F0 0F 06                 1317 	.DW	gbt_ch1234_nop
+      0005F2 11 06                 1318 	.DW	gbt_ch1234_jump_pattern
+      0005F4 22 06                 1319 	.DW	gbt_ch1234_jump_position
+      0005F6 30 06                 1320 	.DW	gbt_ch1234_speed
+      0005F8 0F 06                 1321 	.DW	gbt_ch1234_nop
+      0005FA 0F 06                 1322 	.DW	gbt_ch1234_nop
+      0005FC 0F 06                 1323 	.DW	gbt_ch1234_nop
+      0005FE 0F 06                 1324 	.DW	gbt_ch1234_nop
+      000600 0F 06                 1325 	.DW	gbt_ch1234_nop
+                                   1326 
+      000602                       1327 gbt_ch4_pan$:
+      000602 E6 88                 1328 	and	a,#0x88
+      000604 EA 03 00              1329 	ld	(gbt_pan+3),a
+      000607 3E 01                 1330 	ld	a,#1
+      000609 C9                    1331 	ret ; ret 1
+                                   1332 
+      00060A                       1333 gbt_ch4_cut_note$:
+      00060A EA 03 00              1334 	ld	(gbt_cut_note_tick+3),a
+      00060D AF                    1335 	xor	a,a ; ret 0
+      00060E C9                    1336 	ret
+                                   1337 
+                                   1338 ;-------------------------------------------------------------------------------
+                                   1339 
+                                   1340 ; Common effects go here:
+                                   1341 
+      00060F                       1342 gbt_ch1234_nop:
+      00060F AF                    1343 	xor	a,a ;ret 0
+      000610 C9                    1344 	ret
+                                   1345 
+      000611                       1346 gbt_ch1234_jump_pattern:
+      000611 EA 00 00              1347 	ld	(gbt_current_pattern),a
+      000614 AF                    1348 	xor	a,a
+      000615 EA 00 00              1349 	ld	(gbt_current_step),a
+      000618 EA 00 00              1350 	ld	(gbt_have_to_stop_next_step),a ; clear stop flag
+      00061B 3E 01                 1351 	ld	a,#1
+      00061D EA 00 00              1352 	ld	(gbt_update_pattern_pointers),a
+      000620 AF                    1353 	xor	a,a ;ret 0
+      000621 C9                    1354 	ret
+                                   1355 
+      000622                       1356 gbt_ch1234_jump_position:
+      000622 EA 00 00              1357 	ld	(gbt_current_step),a
+      000625 21 00 00              1358 	ld	hl,#gbt_current_pattern
+      000628 34                    1359 	inc	(hl)
+      000629 3E 01                 1360 	ld	a,#1
+      00062B EA 00 00              1361 	ld	(gbt_update_pattern_pointers),a
+      00062E AF                    1362 	xor	a,a ;ret 0
+      00062F C9                    1363 	ret
+                                   1364 
+      000630                       1365 gbt_ch1234_speed:
+      000630 EA 00 00              1366 	ld	(gbt_speed),a
+      000633 AF                    1367 	xor	a,a
+      000634 EA 00 00              1368 	ld	(gbt_ticks_elapsed),a
+      000637 C9                    1369 	ret ;ret 0
+                                   1370 
+                                   1371 ;-------------------------------------------------------------------------------
+                                   1372 
+      000638                       1373 gbt_update_bank1::
+                                   1374 
+      000638 11 00 00              1375 	ld	de,#gbt_temp_play_data
+                                   1376 
+                                   1377 	; each function will return in de the pointer to next byte
+                                   1378 
+      00063B CD 2C 01              1379 	call	gbt_channel_1_handle
+                                   1380 
+      00063E CD 83 02              1381 	call	gbt_channel_2_handle
+                                   1382 
+      000641 CD D6 03              1383 	call	gbt_channel_3_handle
+                                   1384 
+      000644 CD 48 05              1385 	call	gbt_channel_4_handle
+                                   1386 
+                                   1387 	; end of channel handling
+                                   1388 
+      000647 21 00 00              1389 	ld	hl,#gbt_pan
+      00064A 2A                    1390 	ld	a,(hl+)
+      00064B B6                    1391 	or	a,(hl)
+      00064C 23                    1392 	inc	hl
+      00064D B6                    1393 	or	a,(hl)
+      00064E 23                    1394 	inc hl
+      00064F B6                    1395 	or	a,(hl)
+      000650 EA 25 FF              1396 	ld	(#.NR51),a ; handle panning...
+                                   1397 
+      000653 C9                    1398 	ret
+                                   1399 
+                                   1400 ;-------------------------------------------------------------------------------
+                                   1401 
+      000654                       1402 gbt_update_effects_bank1::
+                                   1403 
+      000654 CD CA 01              1404 	call	channel1_update_effects
+      000657 A7                    1405 	and	a,a
+      000658 C4 AB 01              1406 	call	nz,channel1_refresh_registers
+                                   1407 
+      00065B CD 1D 03              1408 	call	channel2_update_effects
+      00065E A7                    1409 	and	a,a
+      00065F C4 02 03              1410 	call	nz,channel2_refresh_registers
+                                   1411 
+      000662 CD 8A 04              1412 	call	channel3_update_effects
+      000665 A7                    1413 	and	a,a
+      000666 C4 46 04              1414 	call	nz,channel3_refresh_registers
+                                   1415 
+      000669 CD BB 05              1416 	call	channel4_update_effects
+      00066C A7                    1417 	and	a,a
+      00066D C4 A5 05              1418 	call	nz,channel4_refresh_registers
+                                   1419 
+      000670 C9                    1420 	ret
+                                   1421 
+                                   1422 ;-------------------------------------------------------------------------------
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .NR10   =  00FF10     |     .NR11   =  00FF11     |     .NR12   =  00FF12 
+    .NR13   =  00FF13     |     .NR14   =  00FF14     |     .NR21   =  00FF16 
+    .NR22   =  00FF17     |     .NR23   =  00FF18     |     .NR24   =  00FF19 
+    .NR30   =  00FF1A     |     .NR31   =  00FF1B     |     .NR32   =  00FF1C 
+    .NR33   =  00FF1D     |     .NR34   =  00FF1E     |     .NR41   =  00FF20 
+    .NR42   =  00FF21     |     .NR43   =  00FF22     |     .NR44   =  00FF23 
+    .NR50   =  00FF24     |     .NR51   =  00FF25     |     .NR52   =  00FF26 
+    .__.$$$.=  002710 L   |     .__.ABS.=  000000 G   |     .__.CPU.=  000000 L
+    .__.H$L.=  000000 L   |   1 _gbt_get   000120 R   |   1 ch1_dont   0001E1 R
+  1 ch1_freq   00019B R   |   1 ch1_has_   000171 R   |   1 ch1_inst   00015F R
+  1 ch1_just   000156 R   |   1 ch1_more   00013F R   |   1 ch1_no_m   000146 R
+  1 ch1_not_   000200 R   |   1 ch1_not_   000219 R   |   1 ch1_one_   000145 R
+  1 ch2_dont   000334 R   |   1 ch2_freq   0002F2 R   |   1 ch2_has_   0002C8 R
+  1 ch2_inst   0002B6 R   |   1 ch2_just   0002AD R   |   1 ch2_more   000296 R
+  1 ch2_no_m   00029D R   |   1 ch2_not_   000353 R   |   1 ch2_not_   00036C R
+  1 ch2_one_   00029C R   |   1 ch3_dont   0004A6 R   |   1 ch3_effe   000409 R
+  1 ch3_freq   000438 R   |   1 ch3_has_   000412 R   |   1 ch3_just   000400 R
+  1 ch3_loop   000483 R   |   1 ch3_more   0003E9 R   |   1 ch3_no_m   0003F0 R
+  1 ch3_not_   0004C5 R   |   1 ch3_not_   0004DE R   |   1 ch3_one_   0003EF R
+  1 ch4_dont   0005D2 R   |   1 ch4_effe   00057B R   |   1 ch4_has_   000584 R
+  1 ch4_inst   0005A0 R   |   1 ch4_just   000572 R   |   1 ch4_more   00055B R
+  1 ch4_no_m   000562 R   |   1 ch4_one_   000561 R   |   1 channel1   000147 R
+  1 channel1   0001AB R   |   1 channel1   0001CA R   |   1 channel2   00029E R
+  1 channel2   000302 R   |   1 channel2   00031D R   |   1 channel3   0003F1 R
+  1 channel3   000446 R   |   1 channel3   00048A R   |   1 channel4   000563 R
+  1 channel4   0005A5 R   |   1 channel4   0005BB R   |     gbt_arpe   ****** GX
+    gbt_arpe   ****** GX  |     gbt_arpe   ****** GX  |   1 gbt_ch12   000611 R
+  1 gbt_ch12   000622 R   |   1 gbt_ch12   00060F R   |   1 gbt_ch12   000630 R
+  1 gbt_ch1_   000263 R   |   1 gbt_ch1_   00027E R   |   1 gbt_ch1_   00023B R
+  1 gbt_ch1_   00025B R   |   1 gbt_ch2_   0003B6 R   |   1 gbt_ch2_   0003D1 R
+  1 gbt_ch2_   00038E R   |   1 gbt_ch2_   0003AE R   |   1 gbt_ch3_   000528 R
+  1 gbt_ch3_   000543 R   |   1 gbt_ch3_   000500 R   |   1 gbt_ch3_   000520 R
+  1 gbt_ch4_   00060A R   |   1 gbt_ch4_   0005E2 R   |   1 gbt_ch4_   000602 R
+  1 gbt_chan   000473 R   |     gbt_chan   ****** GX  |   1 gbt_chan   00012C GR
+  1 gbt_chan   00022D R   |   1 gbt_chan   000283 GR  |   1 gbt_chan   000380 R
+  1 gbt_chan   0003D6 GR  |   1 gbt_chan   0004F2 R   |   1 gbt_chan   000548 GR
+  1 gbt_chan   0005D4 R   |     gbt_chan   ****** GX  |     gbt_curr   ****** GX
+    gbt_curr   ****** GX  |     gbt_cut_   ****** GX  |     gbt_freq   ****** GX
+  1 gbt_freq   000090 R   |     gbt_have   ****** GX  |     gbt_inst   ****** GX
+  1 gbt_nois   000080 R   |     gbt_pan    ****** GX  |     gbt_spee   ****** GX
+    gbt_temp   ****** GX  |     gbt_tick   ****** GX  |   1 gbt_upda   000638 GR
+  1 gbt_upda   000654 GR  |     gbt_upda   ****** GX  |     gbt_vol    ****** GX
+  1 gbt_wave   000000 R   |   1 refresh_   0001AB R   |   1 refresh_   000302 R
+  1 refresh_   000446 R   |   1 refresh_   0005A5 R
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy Z80-like CPU), page 2.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE      size      0   flags    0
+   1 _CODE_1    size    671   flags    0
+
