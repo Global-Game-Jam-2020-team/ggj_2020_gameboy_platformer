@@ -30,8 +30,8 @@ void init_intro_player()
         sprites_in_use += 1;
     }
 
-    printf("                                                                Skate or Cry");
-    printf("                             Press Start");
+    printf("                                                                Rolling On");
+    printf("                              Press Start");
 
     UINT8 x = 70;
     UINT8 y = 80;
