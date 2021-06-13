@@ -22,6 +22,16 @@ To Jump: the a button
 ![alt text](https://asgith.github.io/images/rolling-on-02.png "Rolling On Screenshot")
 
 ## Miscellaneous
+Credits:
+* Alexis Serna - Design & Game Programming
+  - GitHub: [ASGitH](https://github.com/ASGitH)
+  - LinkedIn: [Alexis Serna](https://www.linkedin.com/in/alexisserna)
+  - Twitter: [ASGDTweet](https://twitter.com/ASGDTweet)
+
+* Matt McCord - Art, Design, Music & Related Programming
+  - GitHub: [mccordgh](https://github.com/mccordgh)
+  - LinkedIn: [Matthew McCord](https://www.linkedin.com/in/mccordinator)
+  - Twitter: [Matt “MCCORDINATOR” McCord](https://twitter.com/mattmccordmattm)
 
 Tools used:
 
