@@ -1,6 +1,6 @@
 # [Rolling On](https://globalgamejam.org/2021/games/skate-or-cry-5)
 
-![alt text](https://asgith.github.io/images/rolling-on.png "Rolling On Screenshot")
+![alt text](https://asgith.github.io/images/game-boy/rolling-on.png "Rolling On Screenshot")
 
 Our protagonist, Skater, has lost their bff. They must skate again to find their peace and healing. It's time to Roll on... You can find the link to the submission on [Global Game Jam](https://globalgamejam.org/2021/games/skate-or-cry-5).
 
@@ -11,7 +11,7 @@ Latest Update:
 * January 29th, 2021
   - Scene management: being able to keep track of the player and handling certain events at certain points during the game. Handling the scrolling background and display the       correct area at the current moment.
 
-![alt text](https://asgith.github.io/images/rolling-on-01.png "Rolling On Screenshot")
+![alt text](https://asgith.github.io/images/game-boy/rolling-on-01.png "Rolling On Screenshot")
 
 ## How to Play
 
@@ -19,7 +19,7 @@ Movement: directional pad
 
 To Jump: the a button
 
-![alt text](https://asgith.github.io/images/rolling-on-02.png "Rolling On Screenshot")
+![alt text](https://asgith.github.io/images/game-boy/rolling-on-02.png "Rolling On Screenshot")
 
 ## Miscellaneous
 Credits:
